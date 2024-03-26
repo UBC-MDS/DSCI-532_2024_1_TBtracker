@@ -60,7 +60,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the project leaders responsible for enforcement at
-yiweizhangca@gmail.com.
+Yiwei Zhang (yiweizhangca@gmail.com), Sean McKay (sean.mckay.314@gmail.com), Hina Bandukwala (hnbandukwala@gmail.com), and Sandra Gross (sandramariagross02@gmail.com)
 All complaints will be reviewed and investigated promptly and fairly.
 
 All project leaders are obligated to respect the privacy and security of the
