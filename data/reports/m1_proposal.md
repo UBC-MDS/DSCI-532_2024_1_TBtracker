@@ -12,21 +12,21 @@ We will be developing a dashboard to visualize the **global prevalence of Tuberc
 
 We are using two datasets from the World Health Organization (WHO) which can be found [here](https://www.google.com/url?q=https://extranet.who.int/tme/generateCSV.asp?ds%3Destimates&sa=D&source=docs&ust=1711469479701182&usg=AOvVaw2Uui8IYP7fyZ3E0_nXPnGw) and [here](https://www.google.com/url?q=https://extranet.who.int/tme/generateCSV.asp?ds%3Destimates_age_sex&sa=D&source=docs&ust=1711469600536959&usg=AOvVaw3O2Ts9QUTKv5xk08Arn6fE). The first dataset summarizes global trends of TB for 217 countries from 2000 to 2022.
 
--   Geographic and demographic information: iso2 code
+-   Geographic and demographic information: `iso2 code`
 
 -   Annual data per country (identified by `year`):
 
-    -    Population (`e_pop_num`),
+    -   Population (`e_pop_num`),
 
     -   WHO-generated estimates:
 
-        -   Absolute estimates of TB incidence with and without HIV: (e_inc_num, e_inc_tbhiv_num),
+        -   Absolute estimates of TB incidence with and without HIV: (`e_inc_num`, `e_inc_tbhiv_num`),
 
-        -    Absolute estimates TB-HIV coinfection (e_inc_tbhiv_num)
+        -   Absolute estimates TB-HIV coinfection (`e_inc_tbhiv_num`)
 
-        -   Absolute estimates of mortality in the population with and without HIV: (e_mort_tbhiv_num, e_mort_exc_tbhiv_num)
+        -   Absolute estimates of mortality in the population with and without HIV: (`e_mort_tbhiv_num`, `e_mort_exc_tbhiv_num`)
 
-        -   Case fatality ratio (cfr): calculated as mortality/incidence
+        -   Case fatality ratio (`cfr`): calculated as mortality/incidence
 
 We will visualize the different WHO-generated estimates to gain an understanding of the epidemiological landscape of TB. Additionally, since HIV is known to strongly increase the risk of TB (Bell & Noursadeghi, 2017), we want to look at **TB incidence, mortality** (for the population with and without HIV) in conjuction with the **TB-HIV coinfection estimates** to visually display the interplay between the two.
 
