@@ -32,9 +32,23 @@ We will visualize the different WHO-generated estimates to gain an understanding
 
 The second dataset summarizes the TB incidence estimates for 215 countries (missing data for 'Netherlands Antilles', 'Serbia & Montenegro') aggregated by **Age, Sex and Risk factors** for the year 2022. Age: '0-14', '0-4', '15-24', '15plus', '18plus', '25-34', '35-44', '45-54', '5-14', '55-64', '65plus' Sex: ‘female’, ‘male’ Risk factors: alc=Harmful use of alcohol; dia=Diabetes; hiv=HIV; smk=Smoking; und=Undernourishment. Finally, we want to visualize other global risk factors associated with TB as measured by the incidence estimates. Unfortunately, since we only have this data for 2022, we will not be able to look at the effects of these risk factors over time.
 
+
+## Section 3: Research Questions and Usage Scenario
+
+Belinda is a director of Clinical Operations at the NGO TB Alliance. Part of her job involves forecasting the number of TB drugs that will need to be developed and allocated to each country, based on their TB case load. The forecasted amount she’ll need to submit will be informed by trends from previous years, so she wants to explore historical trends in TB prevalence across different countries, including the case occurrence and mortality rate. Additionally, since the treatment protocol may differ when considering co-infection with HIV (Bhatt A, Quazi Syed Z, Singh H, 2023), she wants a breakdown for those numbers as well.
+
+
+When Belinda logs in to the TB Tracker app, she’ll be presented with a global view of the caseload across different countries displayed on a map, along with a summary graph of the total caseload per country for the current year - Filters on the top will allow her to look at the incidence or mortality rate, and on the bottom she can switch the year the data is plotted. She can then click on individual countries to get a more detailed breakdown, allowing her to see trends across different years, along with the caseload for HIV-TB coinfection. Additionally, she will get to explore a breakdown by risk factor for the most recent year, if she needs to look at different treatment plans for patients based on their age or other medical conditions. 
+
+
+Based on this data, Belinda will be able to get a good sense of the incidence rate across different countries which will inform her discussions with drug manufacturers, and the amount of money allocated towards production of drugs. The risk factor breakdown can give critical insights into the need for development of new drugs targetting specific age groups or other risk factors.
+
+
 **References**:
 
 Bell, L., & Noursadeghi, M. (2017). Pathogenesis of HIV-1 and Mycobacterium tuberculosis co-infection. *Nature Reviews Microbiology*, *16*(2), 80–90. https://doi.org/10.1038/nrmicro.2017.128
+
+Bhatt A, Quazi Syed Z, Singh H. Converging Epidemics: A Narrative Review of Tuberculosis (TB) and Human Immunodeficiency Virus (HIV) Coinfection. Cureus. 2023 Oct 25;15(10):e47624. doi: 10.7759/cureus.47624. PMID: 38021882; PMCID: PMC10667792.
 
 TB Alliance (n.d). https://www.tballiance.org/
 
