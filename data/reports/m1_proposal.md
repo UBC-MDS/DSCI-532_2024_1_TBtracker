@@ -20,13 +20,17 @@ We are using two datasets from the World Health Organization (WHO) which can be 
 
     -   WHO-generated estimates:
 
-        -   Absolute estimates of TB incidence with and without HIV: (`e_inc_num`, `e_inc_tbhiv_num`),
+        -   Absolute estimates and confidence intervals of TB incidence with and without HIV: 
+            - without HIV: `e_inc_num`, `e_inc_num_hi`, `e_inc_num_lo`
+            - with HIV: `e_inc_tbhiv_num`, `e_inc_tbhiv_num_hi`, `e_inc_tbhiv_num_lo`
 
-        -   Absolute estimates TB-HIV coinfection (`e_inc_tbhiv_num`)
+        -   Absolute estimates and confidence intervals TB-HIV coinfection (`e_inc_tbhiv_num`, `e_inc_tbhiv_num_hi`, `e_inc_tbhiv_num_lo`)
 
-        -   Absolute estimates of mortality in the population with and without HIV: (`e_mort_tbhiv_num`, `e_mort_exc_tbhiv_num`)
+        -   Absolute estimates and confidence intervals of mortality in the population with and without HIV: 
+        - without HIV: `e_mort_exc_tbhiv_num`, `e_mort_exc_tbhiv_hi`, `e_mort_exc_tbhiv_lo`
+        - with HIV: `e_mort_tbhiv_num`, `e_mort_tbhiv_num_hi`, `e_mort_tbhiv_num_lo`
 
-        -   Case fatality ratio (`cfr`): calculated as mortality/incidence
+        -   Case fatality ratio (`cfr`) and confidence intervals (`c_cdr_hi`, `c_cdr_lo`): calculated as mortality/incidence
 
 We will visualize the different WHO-generated estimates to gain an understanding of the epidemiological landscape of TB. Additionally, since HIV is known to strongly increase the risk of TB (Bell & Noursadeghi, 2017), we want to look at **TB incidence, mortality** (for the population with and without HIV) in conjuction with the **TB-HIV coinfection estimates** to visually display the interplay between the two.
 
