@@ -20,18 +20,23 @@ We are using two datasets from the World Health Organization (WHO) which can be 
 
     -   WHO-generated estimates:
 
-        -   Absolute estimates of TB incidence with and without HIV: (`e_inc_num`, `e_inc_tbhiv_num`),
+        -   Absolute estimates and confidence intervals of TB incidence with and without HIV: 
+            - without HIV: `e_inc_num`, `e_inc_num_hi`, `e_inc_num_lo`
+            - with HIV: `e_inc_tbhiv_num`, `e_inc_tbhiv_num_hi`, `e_inc_tbhiv_num_lo`
 
-        -   Absolute estimates TB-HIV coinfection (`e_inc_tbhiv_num`)
+        -   Absolute estimates and confidence intervals TB-HIV coinfection (`e_inc_tbhiv_num`, `e_inc_tbhiv_num_hi`, `e_inc_tbhiv_num_lo`)
 
-        -   Absolute estimates of mortality in the population with and without HIV: (`e_mort_tbhiv_num`, `e_mort_exc_tbhiv_num`)
+        -   Absolute estimates and confidence intervals of mortality in the population with and without HIV: 
+        - without HIV: `e_mort_exc_tbhiv_num`, `e_mort_exc_tbhiv_hi`, `e_mort_exc_tbhiv_lo`
+        - with HIV: `e_mort_tbhiv_num`, `e_mort_tbhiv_num_hi`, `e_mort_tbhiv_num_lo`
 
-        -   Case fatality ratio (`cfr`): calculated as mortality/incidence
+        -   Case fatality ratio (`cfr`) and confidence intervals (`c_cdr_hi`, `c_cdr_lo`): calculated as mortality/incidence
 
 We will visualize the different WHO-generated estimates to gain an understanding of the epidemiological landscape of TB. Additionally, since HIV is known to strongly increase the risk of TB (Bell & Noursadeghi, 2017), we want to look at **TB incidence, mortality** (for the population with and without HIV) in conjuction with the **TB-HIV coinfection estimates** to visually display the interplay between the two.
 
 The second dataset summarizes the TB incidence estimates for 215 countries (missing data for 'Netherlands Antilles', 'Serbia & Montenegro') aggregated by **Age, Sex and Risk factors** for the year 2022. Age: '0-14', '0-4', '15-24', '15plus', '18plus', '25-34', '35-44', '45-54', '5-14', '55-64', '65plus' Sex: ‘female’, ‘male’ Risk factors: alc=Harmful use of alcohol; dia=Diabetes; hiv=HIV; smk=Smoking; und=Undernourishment. Finally, we want to visualize other global risk factors associated with TB as measured by the incidence estimates. Unfortunately, since we only have this data for 2022, we will not be able to look at the effects of these risk factors over time.
 
+Additional data that would be useful for us would be the rate of drug-resistant TB, as the treatment schedule and types of drugs needed differs depending on the type of drug-resistance (Mase SR, Chorba T., 2019). It would also be helpful to have the prevalence rate of latent TB in the population - Since active cases are often seen in individuals with pre-existing latent infections. For example, more than 80% of cases in the US result from latent TB infection (CDC, 2022). Unfortunately this is not something that can be inferred directly from the available data on incidence and mortality, as this is only a measurement of the active cases.
 
 ## Section 3: Research Questions and Usage Scenario
 
@@ -43,8 +48,9 @@ When Belinda logs in to the TB Tracker app, she’ll be presented with a global 
 
 Based on this data, Belinda will be able to get a good sense of the incidence rate across different countries which will inform her discussions with drug manufacturers, and the amount of money allocated towards production of drugs. The risk factor breakdown can give critical insights into the need for development of new drugs targetting specific age groups or other risk factors.
 
-
 **References**:
+
+Mase SR, Chorba T. Treatment of Drug-Resistant Tuberculosis. Clin Chest Med. 2019 Dec;40(4):775-795. doi: 10.1016/j.ccm.2019.08.002. PMID: 31731984; PMCID: PMC7000172.
 
 Bell, L., & Noursadeghi, M. (2017). Pathogenesis of HIV-1 and Mycobacterium tuberculosis co-infection. *Nature Reviews Microbiology*, *16*(2), 80–90. https://doi.org/10.1038/nrmicro.2017.128
 
@@ -53,3 +59,5 @@ Bhatt A, Quazi Syed Z, Singh H. Converging Epidemics: A Narrative Review of Tube
 TB Alliance (n.d). https://www.tballiance.org/
 
 WHO. (2019). Tuberculosis. https://www.who.int/health-topics/tuberculosis#tab=tab_1
+
+CDC (2022). Latent TB Infection in the United States – Published Estimates. https://www.cdc.gov/tb/statistics/ltbi.htm
