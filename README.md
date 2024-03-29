@@ -8,7 +8,7 @@
 - [Application Features](#application-features)
 - [How to Contribute](#how-to-contribute)
 - [Running the Application Locally](#run-locally)
-- [Project Team](#project-team)
+- [Stakeholders](#stakeholders)
 
 ## About the Project
 
@@ -95,9 +95,9 @@ To run the **Global Tuberculosis Tracker** project locally on your machine, foll
 
 By following these instructions, users will be able to set up and run the **Global Tuberculosis Tracker** application locally, ensuring they have all the required dependencies installed through the Conda environment named `TBtracker`.
 
-## Project Team
+## Stakeholders
 - [Sandra Gross](https://github.com/sandygross)
 - [Sean Mckay](https://github.com/sean-m-mckay)
 - [Hina Bandukwala](https://github.com/hbandukw)
-- [Yiwei Zhang](https://github.com/sandygross)
+- [Yiwei Zhang](https://github.com/zywkloo)
 
