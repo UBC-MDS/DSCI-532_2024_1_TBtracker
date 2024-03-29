@@ -42,11 +42,15 @@ Additional data that would be useful for us would be the rate of drug-resistant 
 
 Belinda is a director of Clinical Operations at the NGO TB Alliance. Part of her job involves forecasting the number of TB drugs that will need to be developed and allocated to each country, based on their TB case load. The forecasted amount she’ll need to submit will be informed by trends from previous years, so she wants to explore historical trends in TB prevalence across different countries, including the case occurrence and mortality rate. Additionally, since the treatment protocol may differ when considering co-infection with HIV (Bhatt A, Quazi Syed Z, Singh H, 2023), she wants a breakdown for those numbers as well.
 
-
-When Belinda logs in to the TB Tracker app, she’ll be presented with a global view of the caseload across different countries displayed on a map, along with a summary graph of the total caseload per country for the current year - Filters on the top will allow her to look at the incidence or mortality rate, and on the bottom she can switch the year the data is plotted. She can then click on individual countries to get a more detailed breakdown, allowing her to see trends across different years, along with the caseload for HIV-TB coinfection. Additionally, she will get to explore a breakdown by risk factor for the most recent year, if she needs to look at different treatment plans for patients based on their age or other medical conditions. 
-
+When Belinda logs in to the TB Tracker app, she’ll be presented with a global view of the caseload across different countries displayed on a map, along with a histogram displaying the global trends, and on the bottom she can switch the year the data is plotted. She can then click on individual countries to get a more detailed breakdown, allowing her to see trends across different years, along with the caseload for HIV-TB coinfection. Additionally, she will get to explore a breakdown by risk factor for the most recent year, if she needs to look at different treatment plans for patients based on their age or other medical conditions.
 
 Based on this data, Belinda will be able to get a good sense of the incidence rate across different countries which will inform her discussions with drug manufacturers, and the amount of money allocated towards production of drugs. The risk factor breakdown can give critical insights into the need for development of new drugs targetting specific age groups or other risk factors.
+
+## Section 4: App sketch & brief description
+
+![alt text](/img/sketchup-annotated.jpeg)
+
+The "global TB trends" dashboard contains an interactive visualization of tuberculosis data worldwide. The main page displays a color-coded world map tracking TB incidence/mortality from 2000 to 2022 across 217 countries, complemented by toggles for absolute/normalized data and mortality/incidence metrics. A histogram alongside the map is intended to supplement the map by displaying the global trends as a distribution. Clicking on a country brings up a country-specific profile; for instance, selecting Canada reveals detailed metrics, including trends in TB mortality and incidence, case fatality ratio, and TB-HIV co-infection rates, plus a breakdown of risk factors by age and gender, enhancing the user experience with in-depth, localized insights.
 
 **References**:
 
