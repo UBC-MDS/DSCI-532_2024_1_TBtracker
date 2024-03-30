@@ -8,11 +8,7 @@ dependencies:
     - dash
     - dash-bootstrap-components
     - plotly
-    - r-base
-    - r-tidyverse
-    - r-shiny
-    - r-languageserver
-    - r-plotly
     - pip
     - pip:
         - dash-vega-components
+    - vega_datasets 
