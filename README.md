@@ -12,6 +12,8 @@
 
 ## About the Project
 
+![image](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/assets/18610590/acab8f88-a3c3-44ee-8f8a-49fd29280461)
+
 **The Global Tuberculosis Tracker**, developed by UBC MDS students, serves as a vital tool for visualizing Tuberculosis (TB) data worldwide. Aimed at NGOs, policymakers, and public health organizations, it simplifies the analysis of TB incidence, trends, and risk factors through intuitive visualizations. Utilizing WHO data, this application facilitates informed decisions in the fight against TB, highlighting the disease's dynamics and its interplay with risk factors like HIV. Our goal is to empower stakeholders with accurate data for strategic planning and interventions.
 
 ## Access the Application
@@ -92,6 +94,7 @@ To run the **Global Tuberculosis Tracker** project locally on your machine, foll
     ```
 
     This command will start the application. Follow any on-screen instructions to access it in your web browser.
+    By default, you will see `Dash is running on http://127.0.0.1:8000/`. So just copy and paste the URL into your browser.
 
 By following these instructions, users will be able to set up and run the **Global Tuberculosis Tracker** application locally, ensuring they have all the required dependencies installed through the Conda environment named `TBtracker`.
 
