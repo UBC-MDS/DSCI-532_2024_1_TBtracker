@@ -94,6 +94,7 @@ To run the **Global Tuberculosis Tracker** project locally on your machine, foll
     ```
 
     This command will start the application. Follow any on-screen instructions to access it in your web browser.
+    By default, you will see `Dash is running on http://127.0.0.1:8000/`. So just copy and paste the URL into your browser.
 
 By following these instructions, users will be able to set up and run the **Global Tuberculosis Tracker** application locally, ensuring they have all the required dependencies installed through the Conda environment named `TBtracker`.
 
