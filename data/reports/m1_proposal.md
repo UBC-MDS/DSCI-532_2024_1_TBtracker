@@ -12,7 +12,7 @@ We will be developing a dashboard to visualize the **global prevalence of Tuberc
 
 We are using two datasets from the World Health Organization (WHO) which can be found [here](https://www.google.com/url?q=https://extranet.who.int/tme/generateCSV.asp?ds%3Destimates&sa=D&source=docs&ust=1711469479701182&usg=AOvVaw2Uui8IYP7fyZ3E0_nXPnGw) and [here](https://www.google.com/url?q=https://extranet.who.int/tme/generateCSV.asp?ds%3Destimates_age_sex&sa=D&source=docs&ust=1711469600536959&usg=AOvVaw3O2Ts9QUTKv5xk08Arn6fE). The first dataset summarizes global trends of TB for 217 countries from 2000 to 2022.
 
--   Geographic and demographic information: `iso2 code`
+-   Geographic and demographic information: `iso2`
 
 -   Annual data per country (identified by `year`):
 
@@ -27,26 +27,30 @@ We are using two datasets from the World Health Organization (WHO) which can be 
         -   Absolute estimates and confidence intervals TB-HIV coinfection (`e_inc_tbhiv_num`, `e_inc_tbhiv_num_hi`, `e_inc_tbhiv_num_lo`)
 
         -   Absolute estimates and confidence intervals of mortality in the population with and without HIV: 
-        - without HIV: `e_mort_exc_tbhiv_num`, `e_mort_exc_tbhiv_hi`, `e_mort_exc_tbhiv_lo`
+        - without HIV: `e_mort_exc_tbhiv_num`, `e_mort_exc_tbhiv_num_hi`, `e_mort_exc_tbhiv_num_lo`
         - with HIV: `e_mort_tbhiv_num`, `e_mort_tbhiv_num_hi`, `e_mort_tbhiv_num_lo`
 
-        -   Case fatality ratio (`cfr`) and confidence intervals (`c_cdr_hi`, `c_cdr_lo`): calculated as mortality/incidence
+        -   Case fatality ratio (`cfr`) and confidence intervals (`c_cfr_hi`, `c_cfr_lo`): calculated as mortality/incidence
 
-We will visualize the different WHO-generated estimates to gain an understanding of the epidemiological landscape of TB. Additionally, since HIV is known to strongly increase the risk of TB (Bell & Noursadeghi, 2017), we want to look at **TB incidence, mortality** (for the population with and without HIV) in conjuction with the **TB-HIV coinfection estimates** to visually display the interplay between the two.
+We will visualize the different WHO-generated estimates to gain an understanding of the epidemiological landscape of TB. Additionally, since HIV is known to strongly increase the risk of TB (Bell & Noursadeghi, 2017), we want to look at **TB incidence, mortality** (for the population with and without HIV) in conjunction with the **TB-HIV coinfection estimates** to visually display the interplay between the two.
 
 The second dataset summarizes the TB incidence estimates for 215 countries (missing data for 'Netherlands Antilles', 'Serbia & Montenegro') aggregated by **Age, Sex and Risk factors** for the year 2022. Age: '0-14', '0-4', '15-24', '15plus', '18plus', '25-34', '35-44', '45-54', '5-14', '55-64', '65plus' Sex: ‘female’, ‘male’ Risk factors: alc=Harmful use of alcohol; dia=Diabetes; hiv=HIV; smk=Smoking; und=Undernourishment. Finally, we want to visualize other global risk factors associated with TB as measured by the incidence estimates. Unfortunately, since we only have this data for 2022, we will not be able to look at the effects of these risk factors over time.
 
-Additional data that would be useful for us would be the rate of drug-resistant TB, as the treatment schedule and types of drugs needed differs depending on the type of drug-resistance (Mase SR, Chorba T., 2019). It would also be helpful to have the prevalence rate of latent TB in the population - Since active cases are often seen in individuals with pre-existing latent infections. For example, more than 80% of cases in the US result from latent TB infection (CDC, 2022). Unfortunately this is not something that can be inferred directly from the available data on incidence and mortality, as this is only a measurement of the active cases.
+Additional data that would be useful for us would be the rate of drug-resistant TB, as the treatment schedule and types of drugs needed differ depending on the type of drug resistance (Mase SR, Chorba T., 2019). It would also be helpful to have the prevalence rate of latent TB in the population - Since active cases are often seen in individuals with pre-existing latent infections. For example, more than 80% of cases in the US result from latent TB infection (CDC, 2022). Unfortunately, this is not something that can be inferred directly from the available data on incidence and mortality, as this is only a measurement of the active cases.
 
 ## Section 3: Research Questions and Usage Scenario
 
-Belinda is a director of Clinical Operations at the NGO TB Alliance. Part of her job involves forecasting the number of TB drugs that will need to be developed and allocated to each country, based on their TB case load. The forecasted amount she’ll need to submit will be informed by trends from previous years, so she wants to explore historical trends in TB prevalence across different countries, including the case occurrence and mortality rate. Additionally, since the treatment protocol may differ when considering co-infection with HIV (Bhatt A, Quazi Syed Z, Singh H, 2023), she wants a breakdown for those numbers as well.
+Belinda is a director of Clinical Operations at the NGO TB Alliance. Part of her job involves forecasting the number of TB drugs that will need to be developed and allocated to each country, based on their TB caseload. The forecasted amount she’ll need to submit will be informed by trends from previous years, so she wants to explore historical trends in TB prevalence across different countries, including the case occurrence and mortality rate. Additionally, since the treatment protocol may differ when considering co-infection with HIV (Bhatt A, Quazi Syed Z, Singh H, 2023), she wants a breakdown for those numbers as well.
 
+When Belinda logs in to the TB Tracker app, she’ll be presented with a global view of the caseload across different countries displayed on a map, along with a histogram displaying the global trends, and on the bottom she can switch the year the data is plotted. She can then click on individual countries to get a more detailed breakdown, allowing her to see trends across different years, along with the caseload for HIV-TB coinfection. Additionally, she will get to explore a breakdown by risk factor for the most recent year, if she needs to look at different treatment plans for patients based on their age or other medical conditions.
 
-When Belinda logs in to the TB Tracker app, she’ll be presented with a global view of the caseload across different countries displayed on a map, along with a summary graph of the total caseload per country for the current year - Filters on the top will allow her to look at the incidence or mortality rate, and on the bottom she can switch the year the data is plotted. She can then click on individual countries to get a more detailed breakdown, allowing her to see trends across different years, along with the caseload for HIV-TB coinfection. Additionally, she will get to explore a breakdown by risk factor for the most recent year, if she needs to look at different treatment plans for patients based on their age or other medical conditions. 
+Based on this data, Belinda will be able to get a good sense of the incidence rate across different countries which will inform her discussions with drug manufacturers and the amount of money allocated towards the production of drugs. The risk factor breakdown can give critical insights into the need for development of new drugs targetting specific age groups or other risk factors.
 
+## Section 4: App sketch & brief description
 
-Based on this data, Belinda will be able to get a good sense of the incidence rate across different countries which will inform her discussions with drug manufacturers, and the amount of money allocated towards production of drugs. The risk factor breakdown can give critical insights into the need for development of new drugs targetting specific age groups or other risk factors.
+![alt text](/img/sketchup-annotated.png)
+
+The "global TB trends" dashboard contains an interactive visualization of tuberculosis data worldwide. The main page displays a color-coded world map tracking TB incidence/mortality from 2000 to 2022 across 217 countries, complemented by toggles for absolute/normalized data and mortality/incidence metrics. A histogram alongside the map is intended to supplement the map by displaying the global trends as a distribution. Clicking on a country brings up a country-specific profile; for instance, selecting Canada reveals detailed metrics, including trends in TB mortality and incidence, case fatality ratio, and TB-HIV co-infection rates, plus a breakdown of risk factors by age and gender, enhancing the user experience with in-depth, localized insights.
 
 **References**:
 
