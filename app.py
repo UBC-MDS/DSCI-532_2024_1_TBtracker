@@ -30,8 +30,8 @@ global_widgets_var = [
     dcc.RadioItems(
         id="radio-2",
         options=[
-            {"label": "Incidence Rate", "value": "incidence"},
-            {"label": "Mortality Rate", "value": "mortality"},
+            {"label": "Incidence", "value": "incidence"},
+            {"label": "Mortality", "value": "mortality"},
         ],
         value="incidence",
         labelStyle={"display": "block"},
