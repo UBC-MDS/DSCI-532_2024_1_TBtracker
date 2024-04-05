@@ -14,8 +14,7 @@ world_url = "https://vega.github.io/vega-datasets/data/world-110m.json"
 
 title = html.H1("Global Tuberculosis Trends", style={"textAlign": "center"})
 
-global_widgets_metric = [
-    dcc.RadioItems(
+global_widgets_metric = dcc.RadioItems(
         id="radio-1",
         options=[
             {"label": "Absolute Numbers", "value": "absolute"},
@@ -24,10 +23,8 @@ global_widgets_metric = [
         value="absolute",
         labelStyle={"display": "block"},
     )
-]
 
-global_widgets_var = [
-    dcc.RadioItems(
+global_widgets_var = dcc.RadioItems(
         id="radio-2",
         options=[
             {"label": "Incidence", "value": "incidence"},
@@ -36,7 +33,7 @@ global_widgets_var = [
         value="incidence",
         labelStyle={"display": "block"},
     )
-]
+
 
 geo_chart = dvc.Vega(id = "geo_chart", 
                      spec ={}, 
@@ -49,49 +46,33 @@ histogram = dvc.Vega(
     style={"width": "100%"}
 )
 
-slider_year = dcc.Slider(
-    min=2000,
-    max=2022,
-    value=2022,
-    step=1,
-    marks={str(year): str(year) for year in range(2000, 2023)},
-    id="year-slider",
-)
+slider_year = dcc.Dropdown(
+        id='year', options=tb_data.year, value=2022)
 
-app.layout = dbc.Container(
-    [
-        title,
-        dbc.Row(
-            [
-                dbc.Col(
-                    global_widgets_metric,
-                    width=3,
-                ),
-                dbc.Col(
-                    global_widgets_var,
-                    width=3,
-                ),
-            ]
-        ),
-        dbc.Row(
-            [
-                dbc.Col(geo_chart, md =7),
-                dbc.Col(
-                    histogram,
-                    md = 5
-                ),
-            ]
-        ),
-        html.Label("Year"),
-        slider_year,
-    ]
-)
+
+
+app.layout = dbc.Container([
+    dbc.Row(dbc.Col(title)),
+    dbc.Row([
+        dbc.Col([dbc.Label('Scale'),
+                global_widgets_metric,
+                dbc.Label('Metric'),
+                global_widgets_var,
+                dbc.Label('Year'),
+                slider_year]),
+        dbc.Col([
+            dbc.Row(dbc.Col(geo_chart)),
+            dbc.Row(dbc.Col(histogram))
+        ], md=8)
+    ])
+])
+
 
 
 @callback(
     Output("tb_histogram", "spec"),
     [
-        Input("year-slider", "value"),
+        Input("year", "value"),
         Input("radio-1", "value"),
         Input("radio-2", "value"),
     ],
@@ -142,7 +123,7 @@ def update_histogram(selected_year, selected_type, selected_value):
 @callback(
     Output("geo_chart", "spec"),
     [
-        Input("year-slider", "value"),
+        Input("year", "value"),
         Input("radio-1", "value"),
         Input("radio-2", "value"),
     ],
@@ -165,7 +146,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
     else:
         y_column = "incidence_total"
 
-    geo_chart = alt.Chart(alt.topo_feature(world_url, "countries"), width="container").mark_geoshape(
+    geo_chart = alt.Chart(alt.topo_feature(world_url, "countries"), height = 400, width="container").mark_geoshape(
     stroke="#aaa", strokeWidth=0.25
 ).encode(
     color=alt.Color(f"{y_column}:Q",
@@ -174,7 +155,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
 ).transform_lookup(
     lookup='id',
     from_=alt.LookupData(filtered_df, 'iso_numeric', [y_column, "country"])
-)
+).project(scale=150)
 
     return geo_chart.to_dict()
 
