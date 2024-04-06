@@ -4,10 +4,16 @@ from vega_datasets import data
 import dash_vega_components as dvc
 import dash_bootstrap_components as dbc
 import pandas as pd
+import plotly.express as px
 
 
 #Data 
 tb_data = pd.read_csv("data/preprocessing/tb_data.csv")
+rf_data = pd.read_csv("data/preprocessing/rf_data.csv")
+
+
+
+
 country_list = tb_data["country"].unique()
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
@@ -52,14 +58,37 @@ histogram = dvc.Vega(
 slider_year = dcc.Dropdown(
         id='year', options=tb_data.year, value=2022)
 
-country_dropdown = dcc.Dropdown(
-    id='country-dropdown', options=country_list, value=country_list[0]
-)
 
 
+risk_facts_graph = dbc.Container([
+        dbc.Container([
+            dcc.Dropdown(
+                rf_data['country'].unique(),
+                id='rf-country-dropdown'
+            )
+        ], style={'width': '48%', 'display': 'inline-block'}),
+
+        dbc.Container([
+            dcc.Dropdown(
+                rf_data['sex'].unique(),
+                id='rf-sex-dropdown',
+
+            )
+        ], style={'width': '48%', 'display': 'inline-block'}),
+
+        dbc.Container([
+            dcc.Dropdown(
+                rf_data['age_group'].unique(),
+                id='rf-age-dropdown',
+                multi=True
+            
+            )
+        ], style={'width': '48%', 'display': 'inline-block'}),
+    
+    dcc.Graph(id='indicator-graphic'),
+])
 
 main_page = dbc.Container([
-    dbc.Row(dbc.Col(title)),
     dbc.Row([
         dbc.Col([dbc.Label('Scale'),
                 global_widgets_metric,
@@ -76,7 +105,7 @@ main_page = dbc.Container([
 
 country_page = dbc.Container(
     [
-        dbc.Col([country_dropdown], width = 3)
+        dbc.Col([risk_facts_graph])
     ]
 )
 
@@ -91,6 +120,7 @@ global_tab = dbc.Container([
 ])
 
 app.layout = dbc.Container([
+    title,
     global_tab,
     dcc.Store(id='memory-output'),
     dbc.Container(id='tb-page')
@@ -99,9 +129,9 @@ app.layout = dbc.Container([
 
 
 # This has to be done in a separate callback than below
-# Otherwise the country-dropdown is not yet defined before we switch tabs
+# Otherwise the rf-country-dropdown is not yet defined before we switch tabs
 @callback(
-    Output('country-dropdown', 'value'),
+    Output('rf-country-dropdown', 'value'),
     Input('memory-output', 'data')
 )
 def update_dropdown(data):
@@ -228,6 +258,42 @@ def update_geofigure(selected_year, selected_type, selected_value):
 
     return geo_chart.to_dict()
 
+
+@callback(
+    Output('indicator-graphic', 'figure'),
+    Input('rf-country-dropdown', 'value'),
+    Input('rf-sex-dropdown', 'value'),
+    Input('rf-age-dropdown', 'value'))
+def update_graph(country_value, xaxis_sex, xaxis_age):
+    rff = rf_data[rf_data['country'] == country_value]
+    rff1 = rff.groupby(['age_group', 'sex'], as_index=False)['best'].sum()
+    
+    if xaxis_age == None:
+        rff2 = rff1.copy()
+    else:
+        rff2 = rff1.loc[rff1["age_group"].isin(xaxis_age)]
+    
+    if xaxis_sex == None:
+        rff3 = rff2.copy()
+    else:
+        rff3 = rff2.loc[rff2["sex"] == xaxis_sex]
+    
+    fig = px.bar(rff3, x = 'age_group', y = 'best', color='sex',
+                 labels={'age_group': 'Age Group', 
+                         'best':'TB Incidence (Estimate from WHO)'})
+
+    fig.update_layout(margin={'l': 40, 'b': 40, 't': 10, 'r': 0}, hovermode='closest')
+
+    # Custom legend labels
+    custom_labels = {'m': 'Male', 'f': 'Female'}
+
+    for trace in fig.data:
+        if trace.name in custom_labels:
+            trace.name = custom_labels[trace.name]
+
+    fig.update_layout(legend_title_text='Sex')
+
+    return fig
 
 if __name__ == "__main__":
     app.run_server(port=8000, host="127.0.0.1",
