@@ -1,0 +1,14 @@
+altair==5.3.0
+dash==2.16.1
+dash-bootstrap-components==1.5.0
+dash-core-components==2.0.0
+dash-html-components==2.0.0
+dash-table==5.0.0
+dash-vega-components==0.9.0
+gunicorn==21.2.*
+numpy==1.26.3
+pandas==2.2.0
+pip==23.3.2
+plotly==5.20.0
+requests==2.31.0
+
