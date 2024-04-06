@@ -1,13 +1,16 @@
-from dash import Dash, html, dcc, Input, Output, callback
+from dash import Dash, html, dcc, Input, Output, callback, no_update
 import altair as alt
 from vega_datasets import data
 import dash_vega_components as dvc
 import dash_bootstrap_components as dbc
 import pandas as pd
 
-tb_data = pd.read_csv("data/preprocessing/tb_data.csv")
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+#Data 
+tb_data = pd.read_csv("data/preprocessing/tb_data.csv")
+country_list = tb_data["country"].unique()
+
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
 
 world_url = "https://vega.github.io/vega-datasets/data/world-110m.json"
@@ -34,9 +37,9 @@ global_widgets_var = dcc.RadioItems(
         labelStyle={"display": "block"},
     )
 
-
 geo_chart = dvc.Vega(id = "geo_chart", 
                      spec ={}, 
+                     signalsToObserve=["selected_country"],
                      style={"width": "100%"})
 
 histogram = dvc.Vega(
@@ -49,9 +52,13 @@ histogram = dvc.Vega(
 slider_year = dcc.Dropdown(
         id='year', options=tb_data.year, value=2022)
 
+country_dropdown = dcc.Dropdown(
+    id='country-dropdown', options=country_list, value=country_list[0]
+)
 
 
-app.layout = dbc.Container([
+
+main_page = dbc.Container([
     dbc.Row(dbc.Col(title)),
     dbc.Row([
         dbc.Col([dbc.Label('Scale'),
@@ -67,6 +74,67 @@ app.layout = dbc.Container([
     ])
 ])
 
+country_page = dbc.Container(
+    [
+        dbc.Col([country_dropdown], width = 3)
+    ]
+)
+
+global_tab = dbc.Container([
+    dcc.Tabs(
+        id="global-tab",
+        value="tab-1",
+        children=[
+        dcc.Tab(label='Global Data', value='tab-1'),
+        dcc.Tab(label='Country-Specific', value='tab-2'),
+    ]),
+])
+
+app.layout = dbc.Container([
+    global_tab,
+    dcc.Store(id='memory-output'),
+    dbc.Container(id='tb-page')
+])
+
+
+
+# This has to be done in a separate callback than below
+# Otherwise the country-dropdown is not yet defined before we switch tabs
+@callback(
+    Output('country-dropdown', 'value'),
+    Input('memory-output', 'data')
+)
+def update_dropdown(data):
+    return data
+
+
+
+# Returns a no_update if selected country is not none otherwise we enter a callback loop
+@callback(
+    Output('global-tab', 'value'),
+    Output('memory-output', 'data'),
+    Input('geo_chart', 'signalData'),
+    prevent_initial_call=True
+)
+def render_content(data):
+    if "selected_country" in data and data["selected_country"]:
+        return ["tab-2", str(data["selected_country"]["country"][0])]
+    else:
+        return [no_update, no_update] 
+
+
+
+@callback(
+    Output('tb-page', 'children'),
+    Input('global-tab', 'value'),
+)
+def render_content(tab):
+    if tab == 'tab-1':
+        return main_page
+    elif tab == 'tab-2':
+        return dbc.Container([
+            country_page
+        ])
 
 
 @callback(
@@ -108,10 +176,8 @@ def update_histogram(selected_year, selected_type, selected_value):
             y=alt.Y(
                 y_column,
                 title=(
-                    f"{'Incidence' if selected_value ==
-                        'incidence' else 'Mortality'}",
-                    f"{'Absolute' if selected_type ==
-                        'absolute' else 'Relative'}",
+                    f"{'Incidence' if selected_value == 'incidence' else 'Mortality'}",
+                    f"{'Absolute' if selected_type == 'absolute' else 'Relative'}",
                 ),
             ),
             tooltip=["country", y_column],
@@ -155,7 +221,10 @@ def update_geofigure(selected_year, selected_type, selected_value):
 ).transform_lookup(
     lookup='id',
     from_=alt.LookupData(filtered_df, 'iso_numeric', [y_column, "country"])
+).add_params(
+        alt.selection_point(fields=["country"], name="selected_country")
 ).project(scale=150)
+    
 
     return geo_chart.to_dict()
 
