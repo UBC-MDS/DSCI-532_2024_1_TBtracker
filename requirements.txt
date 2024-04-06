@@ -9,5 +9,6 @@ gunicorn==21.2.*
 numpy==1.26.3
 pandas==2.2.0
 pip==23.3.2
+plotly==5.20.0
 requests==2.31.0
 
