@@ -42,6 +42,16 @@ tb_data_preprocess["mortality_rate"] = (
     tb_data_preprocess["mortality_total"] / tb_data_preprocess["e_pop_num"]
 )
 
+tb_data_preprocess["cfr_total"] = tb_data_preprocess["cfr"]
+tb_data_preprocess["tbhiv_coinfection_total"] = (
+    tb_data_preprocess["e_inc_tbhiv_num"] +
+    tb_data_preprocess["e_inc_tbhiv_num_hi"]
+)
+tb_data_preprocess["tbhiv_coinfection_rate"] = (
+    tb_data_preprocess["tbhiv_coinfection_total"] /
+    tb_data_preprocess["e_pop_num"]
+)
+
 tb_data_preprocess = tb_data_preprocess.dropna()
 (tb_data_preprocess.to_csv("data/preprocessing/tb_data.csv", index=False))
 
