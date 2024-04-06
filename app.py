@@ -1,7 +1,7 @@
+from src.app import layout as main_layout
 import os
 src_path = os.path.abspath(os.path.dirname(__file__))
 
-from src.main import layout as main_layout
 from dash import Dash
 import dash_bootstrap_components as dbc
 
