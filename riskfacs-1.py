@@ -6,15 +6,11 @@ import pandas as pd
 app = Dash(__name__)
 
 rf = pd.read_csv("data/raw/TB_burden_age_sex_2024-03-26.csv")
-rf_pak = rf.loc[rf["country"] == 'Pakistan']
-
-rf_pak2 = rf_pak.groupby(['age_group', 'sex'], as_index=False)['best'].sum()
-rf_pak3 = rf_pak2.loc[(rf_pak2["sex"] != 'a') & (rf_pak2["age_group"] != 'all')]
-
-rf_pak3 = rf_pak3[~rf_pak3['age_group'].isin(['0-14', '15plus', '18plus'])].copy()
+rf = rf.loc[(rf["sex"] != 'a') & (rf["age_group"] != 'all')]
+rf = rf[~rf['age_group'].isin(['0-14', '15plus', '18plus'])].copy()
 order_age = ['0-4', '5-14', '15-24', '25-34', '35-44', '45-54', '55-64', '65plus']
-rf_pak3['age_group'] = pd.Categorical(rf_pak3['age_group'], categories=order_age, ordered=True)
-rf_pak3 = rf_pak3.sort_values('age_group')
+rf['age_group'] = pd.Categorical(rf['age_group'], categories=order_age, ordered=True)
+rf = rf.sort_values('age_group')
 
 
 app.layout = html.Div([
@@ -22,40 +18,67 @@ app.layout = html.Div([
 
         html.Div([
             dcc.Dropdown(
-                rf_pak3['age_group'].unique(),
-                id='xaxis-column'
+                rf['country'].unique(),
+                id='country_value'
             )
         ], style={'width': '48%', 'display': 'inline-block'}),
 
-    ]),
+        html.Div([
+            dcc.Dropdown(
+                rf['sex'].unique(),
+                id='xaxis_sex',
 
+            )
+        ], style={'width': '48%', 'display': 'inline-block'}),
+
+        html.Div([
+            dcc.Dropdown(
+                rf['age_group'].unique(),
+                id='xaxis_age',
+                multi=True
+            
+            )
+        ], style={'width': '48%', 'display': 'inline-block'}),
+
+    
     dcc.Graph(id='indicator-graphic'),
 
 ])
-
+])
 
 @callback(
     Output('indicator-graphic', 'figure'),
-    Input('xaxis-column', 'value'),
-    Input('yaxis-column', 'value'),
-    Input('xaxis-type', 'value'),
-    Input('yaxis-type', 'value'))
-def update_graph(xaxis_column_name, yaxis_column_name,
-                 xaxis_type, yaxis_type,
-                 year_value):
-    #dff = df[df['Year'] == year_value]
-
-    fig = px.box(x=rf_pak3[rf_pak3['age_group'] == xaxis_column_name]['Value'],
-                     y=rf_pak3[rf_pak3['Best'] == yaxis_column_name]['Value'],
-                     hover_name=dff[dff['Indicator Name'] == yaxis_column_name]['Country Name'])
+    Input('country_value', 'value'),
+    Input('xaxis_sex', 'value'),
+    Input('xaxis_age', 'value'))
+def update_graph(country_value, xaxis_sex, xaxis_age):
+    rff = rf[rf['country'] == country_value]
+    rff1 = rff.groupby(['age_group', 'sex'], as_index=False)['best'].sum()
+    
+    if xaxis_age == None:
+        rff2 = rff1.copy()
+    else:
+        rff2 = rff1.loc[rff1["age_group"].isin(xaxis_age)]
+    
+    if xaxis_sex == None:
+        rff3 = rff2.copy()
+    else:
+        rff3 = rff2.loc[rff2["sex"] == xaxis_sex]
+    
+    fig = px.bar(rff3, x = 'age_group', y = 'best', color='sex',
+                 labels={'age_group': 'Age Group', 
+                         'best':'TB Incidence (Estimate from WHO)'})
 
     fig.update_layout(margin={'l': 40, 'b': 40, 't': 10, 'r': 0}, hovermode='closest')
 
-    fig.update_xaxes(title=xaxis_column_name,
-                     type='linear' if xaxis_type == 'Linear' else 'log')
+    # Custom legend labels
+    custom_labels = {'m': 'Male', 'f': 'Female'}
 
-    fig.update_yaxes(title=yaxis_column_name,
-                     type='linear' if yaxis_type == 'Linear' else 'log')
+    for trace in fig.data:
+        if trace.name in custom_labels:
+            trace.name = custom_labels[trace.name]
+
+    fig.update_layout(legend_title_text='Sex')
 
     return fig
 
