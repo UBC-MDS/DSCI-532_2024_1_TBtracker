@@ -4,6 +4,7 @@ channels:
     - defaults
 dependencies:
     - ipykernel
+    - altair
     - altair-all
     - dash
     - dash-bootstrap-components
