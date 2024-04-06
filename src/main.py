@@ -1,4 +1,4 @@
-from dash import html, dcc, Input, Output, callback
+from dash import html, dcc, Input, Output, callback, no_update
 import dash_bootstrap_components as dbc
 from .country import country_page  # Import the app
 import pandas as pd
