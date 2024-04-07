@@ -46,9 +46,6 @@ def create_line_plot(df, x_column, y_columns, title, legend_names):
 )
 def update_plots(selected_country):
     # Filter the data based on the selected country
-    print("selected_country:"+selected_country)
-    # if not selected_country:
-    #     selected_country = "Canada"
     filtered_data = tb_data[tb_data['country'] == selected_country]
 
     # Mapping of original column names to human-readable names

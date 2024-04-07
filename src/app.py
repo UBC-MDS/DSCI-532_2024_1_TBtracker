@@ -105,7 +105,7 @@ def render_content(data):
     if "selected_country" in data and data["selected_country"]:
         return ["tab-2", str(data["selected_country"]["country"][0])]
     else:
-        return [no_update, no_update]
+        return [no_update, "Canada"]
 
 
 @callback(
