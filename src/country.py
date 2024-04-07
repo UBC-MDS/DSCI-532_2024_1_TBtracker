@@ -7,7 +7,7 @@ rf_data = pd.read_csv("data/preprocessing/rf_data.csv")
 tb_data = pd.read_csv("data/preprocessing/tb_data.csv")
 
 # Function to create line plots
-country_dropwdown = dcc.Dropdown(rf_data["country"].unique(), id="rf-country-dropdown")
+country_dropdown = dcc.Dropdown(rf_data["country"].unique(), id="rf-country-dropdown")
 sex_dropdown = dcc.Dropdown(rf_data["sex"].unique(), id="rf-sex-dropdown")
 age_dropdown = dcc.Dropdown(
     rf_data["age_group"].unique(), id="rf-age-dropdown", multi=True
@@ -16,7 +16,7 @@ mortality_incidence_plot = dcc.Graph(id="tb_mortality_incidence_plot")
 case_fatality_ratio_plot = dcc.Graph(id="tb_case_fatality_ratio_plot")
 hiv_coinfection_plot = dcc.Graph(id="tb_hiv_coinfection_plot")
 risk_fac_graph = dcc.Graph(id="indicator-graphic")
-title = html.H1("Global Tuberculosis Trends", style={"textAlign": "center"})
+title = html.H1(id="page-title", children="Global Tuberculosis Trends")
 
 
 def create_line_plot(df, x_column, y_columns, title, legend_names):
@@ -50,7 +50,11 @@ def create_line_plot(df, x_column, y_columns, title, legend_names):
 
 country_page = dbc.Container(
     children=[
-        dbc.Row([dbc.Col([title]), dbc.Col([title])]),
+        dbc.Row([title]),
+        dbc.Row(
+            [dbc.Col(country_dropdown, width=4)],
+            justify="start",
+        ),
         dbc.Row(
             [
                 dbc.Col([mortality_incidence_plot], width=4),
@@ -59,6 +63,8 @@ country_page = dbc.Container(
             ],
             className="mb-4",
         ),
+        html.Br(),
+        html.H4("TB Incidence by Demographic Group (2022)"),
         dbc.Row(
             [
                 dbc.Col(sex_dropdown, width=4),
@@ -140,7 +146,11 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
         x="age_group",
         y="best",
         color="sex",
-        labels={"age_group": "Age Group", "best": "TB Incidence (Estimate from WHO)"},
+        labels={
+            "age_group": "Age Group",
+            "best": "TB Incidence (2022 Estimate from WHO)",
+        },
+        template="plotly_white",
     )
 
     fig.update_layout(margin={"l": 40, "b": 40, "t": 10, "r": 0}, hovermode="closest")
@@ -155,3 +165,14 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
     fig.update_layout(legend_title_text="Sex")
 
     return fig
+
+
+@callback(
+    Output("page-title", "children"),
+    Input("rf-country-dropdown", "value"),
+)
+def update_title(selected_country):
+    if not selected_country:
+        return "Global Tuberculosis Trends"
+    else:
+        return f"{selected_country}"

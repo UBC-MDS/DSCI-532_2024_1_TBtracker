@@ -49,7 +49,10 @@ histogram = dvc.Vega(
 )
 
 slider_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
-
+global_tab_content = html.Div([title])
+global_tab = dcc.Tab(label="Global Data", value="tab-1", children=[global_tab_content])
+country_tab = dcc.Tab(label="Country-Specific", value="tab-2")
+total_tab = dcc.Tabs(id="global-tab", value="tab-1", children=[global_tab, country_tab])
 
 main_page = dbc.Container(
     [
@@ -57,16 +60,25 @@ main_page = dbc.Container(
             [
                 dbc.Col(
                     [
+                        html.H4("FILTERS"),
                         dbc.Label("Scale"),
                         global_widgets_metric,
+                        html.Br(),
                         dbc.Label("Metric"),
                         global_widgets_var,
+                        html.Br(),
                         dbc.Label("Year"),
                         slider_year,
+                        html.Br(),
+                        html.Br(),
+                        html.Br(),
+                        html.Br(),
+                        html.Br(),
+                        html.P("Hello"),
                     ]
                 ),
                 dbc.Col(
-                    [dbc.Row(dbc.Col(geo_chart)), dbc.Row(dbc.Col(histogram))], md=8
+                    [dbc.Row(dbc.Col(geo_chart)), dbc.Row(dbc.Col(histogram))], md=10
                 ),
             ]
         )
@@ -80,20 +92,7 @@ global_tab_content = html.Div(
     ]
 )
 
-global_tab = dbc.Container(
-    [
-        dcc.Tabs(
-            id="global-tab",
-            value="tab-1",
-            children=[
-                dcc.Tab(
-                    label="Global Data", value="tab-1", children=[global_tab_content]
-                ),
-                dcc.Tab(label="Country-Specific", value="tab-2"),
-            ],
-        ),
-    ]
-)
+global_tab = dbc.Container([total_tab])
 
 layout = dbc.Container(
     [global_tab, dcc.Store(id="memory-output"), dbc.Container(id="tb-page")]
