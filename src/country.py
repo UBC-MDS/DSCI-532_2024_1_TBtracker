@@ -87,7 +87,7 @@ country_page = dbc.Container(
                 dbc.Col(risk_pie_chart, width=5)
             ]
         )
-    ]
+    ], fluid=True
 )
 
 

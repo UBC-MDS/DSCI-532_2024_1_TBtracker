@@ -99,11 +99,12 @@ main_page = dbc.Container(
                 ),
             ]
         )
-    ]
+    ], fluid=True
 )
 
 layout = dbc.Container(
-    [total_tab, dcc.Store(id="memory-output"), dbc.Container(id="tb-page")]
+    [total_tab, dcc.Store(id="memory-output"), dbc.Container(id="tb-page", fluid=True)],
+    fluid=True
 )
 
 
@@ -139,9 +140,7 @@ def render_content(tab):
     if tab == 'tab-1':
         return main_page
     elif tab == 'tab-2':
-        return dbc.Container([
-            country_page
-        ])
+        return country_page
 
 
 @callback(
