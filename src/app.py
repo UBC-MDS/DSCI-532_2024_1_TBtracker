@@ -4,6 +4,7 @@ from .country import country_page  # Import the app
 import pandas as pd
 import altair as alt
 import dash_vega_components as dvc
+import os
 
 
 # Data
@@ -13,6 +14,8 @@ tb_data = pd.read_csv("data/preprocessing/tb_data.csv")
 world_url = "https://vega.github.io/vega-datasets/data/world-110m.json"
 
 title = html.H1("Global Tuberculosis Trends", style={"textAlign": "center"})
+
+deploy_time = os.getenv('DEPLOY_DATETIME') #Set in render.com build step
 
 global_widgets_metric = dcc.RadioItems(
     id="radio-1",
@@ -48,22 +51,36 @@ histogram = dvc.Vega(
     style={"width": "100%"},
 )
 
-slider_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
-global_tab_content = html.Div([title])
-global_tab = dcc.Tab(label="Global Data", value="tab-1", children=[global_tab_content], 
+dropdown_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
+
+global_tab = dcc.Tab(label="Global Data", value="tab-1", 
                      selected_style={'background-color' : '#cee3eb'}, style={'background-color' : '#dfebed'})
+
 country_tab = dcc.Tab(label="Country-Specific", value="tab-2",
                       selected_style={'background-color' : '#cee3eb'}, style={'background-color' : '#dfebed'})
+
 total_tab = dcc.Tabs(id="global-tab", value="tab-1", children=[global_tab, country_tab],
                      style={"padding" : "10px"})
 
+
+build_info = html.Div([
+        html.H4("ABOUT", style={'padding-top': '10%'}),
+        html.P("TBTracker uses data from WHO's global tuberculosis platform to visualize incidence and mortality rates across \
+                countries. Data was collected from the 2023 report, which includes data up to (but not including) 2023.", style={"font-size":"0.8em"}),
+        html.P("App was created by Sandra Gross, Sean McKay, Hina Bandukwala, and Yiwei Zhang", style={"font-size":"0.8em"}),
+        html.A("Github Repo", href="https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker", style={"font-size":"0.8em"}),
+        html.P(f"Last build was { deploy_time if deploy_time else '2024-04-06'}", style={"font-size":"0.8em"})
+])
+
+
 main_page = dbc.Container(
-    [
+    [   
+        dbc.Row([title]),
         dbc.Row(
             [
                 dbc.Col(
                     [
-                        html.H4("FILTERS", style={'font-weight': 'bold', 'padding-top': '10%'}),
+                        html.H4("FILTERS", style={'padding-top': '10%'}),
                         dbc.Label("Scale", style={'font-weight': 'bold', 'padding-top': '10%'}),
                         global_widgets_metric,
                         html.Br(),
@@ -71,14 +88,13 @@ main_page = dbc.Container(
                         global_widgets_var,
                         html.Br(),
                         dbc.Label("Year", style={'font-weight': 'bold', 'padding-top': '10%'}),
-                        slider_year,
+                        dropdown_year,
                         html.Br(),
                         html.Br(),
                         html.Br(),
                         html.Br(),
-                        html.Br(),
-                        html.P("Hello"),
-                    ],  style={'background-color' : '#dfebed'}
+                        build_info
+                    ], md=2, style={'background-color' : '#dfebed'}
                 ),
                 dbc.Col(
                     [dbc.Row(dbc.Col(geo_chart)), dbc.Row(dbc.Col(histogram))], md=10
@@ -88,17 +104,8 @@ main_page = dbc.Container(
     ], fluid=True
 )
 
-global_tab_content = html.Div(
-    [
-        title
-        # Include the rest of the content for the global tab here, like risk_facts_graph or other components
-    ]
-)
-
-global_tab = dbc.Container([total_tab])
-
 layout = dbc.Container(
-    [global_tab, dcc.Store(id="memory-output"), dbc.Container(id="tb-page")], fluid=True
+    [total_tab, dcc.Store(id="memory-output"), dbc.Container(id="tb-page")], fluid=True
 )
 
 

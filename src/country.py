@@ -16,7 +16,7 @@ mortality_incidence_plot = dcc.Graph(id="tb_mortality_incidence_plot")
 case_fatality_ratio_plot = dcc.Graph(id="tb_case_fatality_ratio_plot")
 hiv_coinfection_plot = dcc.Graph(id="tb_hiv_coinfection_plot")
 risk_fac_graph = dcc.Graph(id="indicator-graphic")
-title = html.H1(id="page-title", children="Global Tuberculosis Trends")
+title = html.H1(id="page-title")
 
 
 def create_line_plot(df, x_column, y_columns, title, legend_names):
