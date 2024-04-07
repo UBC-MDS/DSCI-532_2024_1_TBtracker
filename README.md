@@ -98,6 +98,10 @@ To run the **Global Tuberculosis Tracker** project locally on your machine, foll
 
 By following these instructions, users will be able to set up and run the **Global Tuberculosis Tracker** application locally, ensuring they have all the required dependencies installed through the Conda environment named `TBtracker`.
 
+## Contributing
+
+Interested in contributing? Check out the contributing guidelines. Please note that this project is released with a Code of Conduct. By contributing to this project, you agree to abide by its terms. Please check our [contributing file]([https://github.com/sandygross](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/blob/main/CONTRIBUTING.md)).
+
 ## Stakeholders
 - [Sandra Gross](https://github.com/sandygross)
 - [Sean Mckay](https://github.com/sean-m-mckay)
