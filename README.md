@@ -10,11 +10,24 @@
 - [Running the Application Locally](#run-locally)
 - [Stakeholders](#stakeholders)
 
-## About the Project
+## What are we doing?
 
 ![image](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/assets/18610590/acab8f88-a3c3-44ee-8f8a-49fd29280461)
 
-**The Global Tuberculosis Tracker**, developed by UBC MDS students, serves as a vital tool for visualizing Tuberculosis (TB) data worldwide. Aimed at NGOs, policymakers, and public health organizations, it simplifies the analysis of TB incidence, trends, and risk factors through intuitive visualizations. Utilizing WHO data, this application facilitates informed decisions in the fight against TB, highlighting the disease's dynamics and its interplay with risk factors like HIV. Our goal is to empower stakeholders with accurate data for strategic planning and interventions.
+We're students from the UBC Master of Data Science program, and we've developed The Global Tuberculosis Tracker as a resource for easy access to global TB trends. This tool is designed for NGOs, policymakers, and public health organizations to streamline the analysis of TB incidence, its trends, and associated risk factors through straightforward visualizations. By leveraging data from the WHO, our application supports well-informed decision-making in the battle against TB, emphasizing the disease's progression and its association with risk factors such as HIV. Our objective is to equip stakeholders with precise data to aid strategic planning and intervention efforts.
+
+
+## Dahsboard Functionality Overview
+
+Our dashboard provides an interactive visualization of WHO Tuberculosis (TB) data across global and country-specific levels. Here is an outline of its capabilities:
+- Geospatial Heatmap: A world map visualizes TB 'Incidence' or 'Mortality' rates by country for a selected year. The map allows for two modes of data representation—absolute numbers or rates relative to population size.
+- Data Selection: Users can refine the data displayed based on the year of interest and choose between displaying incidence or mortality data. This selection impacts both the heatmap and accompanying histogram.
+- Interactive Elements: Hovering over countries on the heatmap reveals specific data points through tooltips. By selecting a country, users are directed to a detailed analysis in a separate tab.
+- Country-Specific Trends: Within this tab, the TB trends of the selected country are dissected through five distinct visualizations:
+-     Line Plots: Three line plots track 'TB Mortality and Incidence', 'TB Case Fatality Ratio', and 'TB-HIV Coinfection' rates over time.
+-     Bar Chart: TB incidence rates are broken down by demographic groups. Users can choose multiple age groups at a time and one of the two categories for sex provided. (disclaimer: The sex information is restricted by WHO's categorizations).
+-     Pie Chart: A pie chart presents the distribution of TB incidence by various risk factors, such as smoking and alcohol use, providing insights into potential areas for public health interventions.
+Each visualization has been designed with user interactivity in mind, offering the ability to customize the data displayed according to demographic and risk factor breakdowns.
 
 ## Access the Application
 
@@ -98,9 +111,10 @@ To run the **Global Tuberculosis Tracker** project locally on your machine, foll
 
 By following these instructions, users will be able to set up and run the **Global Tuberculosis Tracker** application locally, ensuring they have all the required dependencies installed through the Conda environment named `TBtracker`.
 
-## Contributing
+## Support
 
-Interested in contributing? Check out the contributing guidelines. Please note that this project is released with a Code of Conduct. By contributing to this project, you agree to abide by its terms. Please check our [contributing file]([https://github.com/sandygross](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/blob/main/CONTRIBUTING.md)).
+If you want to report a problem or suggest an enhancement please open an issue on this github repository.
+
 
 ## Stakeholders
 - [Sandra Gross](https://github.com/sandygross)
