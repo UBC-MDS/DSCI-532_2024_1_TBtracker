@@ -37,18 +37,16 @@ global_widgets_var = dcc.RadioItems(
     labelStyle={"display": "block"},
 )
 
-geo_chart = dvc.Vega(
-    id="geo_chart",
-    spec={},
-    signalsToObserve=["selected_country"],
-    style={"width": "100%"},
-)
+geo_chart = dvc.Vega(id="geo_chart",
+                     spec={},
+                     signalsToObserve=["selected_country"],
+                     style={"width": "100%"})
 
 histogram = dvc.Vega(
     id="tb_histogram",
     opt={"renderer": "svg", "actions": False},
     spec={},
-    style={"width": "100%"},
+    style={"width": "100%"}
 )
 
 dropdown_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
@@ -101,44 +99,49 @@ main_page = dbc.Container(
                 ),
             ]
         )
-    ], fluid=True
+    ]
 )
 
 layout = dbc.Container(
-    [total_tab, dcc.Store(id="memory-output"), dbc.Container(id="tb-page")], fluid=True
+    [total_tab, dcc.Store(id="memory-output"), dbc.Container(id="tb-page")]
 )
 
 
 # This has to be done in a separate callback than below
 # Otherwise the rf-country-dropdown is not yet defined before we switch tabs
-@callback(Output("rf-country-dropdown", "value"), Input("memory-output", "data"))
+@callback(
+    Output('rf-country-dropdown', 'value'),
+    Input('memory-output', 'data')
+)
 def update_dropdown(data):
     return data
 
 
 # Returns a no_update if selected country is not none otherwise we enter a callback loop
 @callback(
-    Output("global-tab", "value"),
-    Output("memory-output", "data"),
-    Input("geo_chart", "signalData"),
-    prevent_initial_call=True,
+    Output('global-tab', 'value'),
+    Output('memory-output', 'data'),
+    Input('geo_chart', 'signalData'),
+    prevent_initial_call=True
 )
 def render_content(data):
     if data is not None and "selected_country" in data and data["selected_country"]:
         return ["tab-2", str(data["selected_country"]["country"][0])]
     else:
-        return [no_update, no_update]
+        return [no_update, "Canada"]
 
 
 @callback(
-    Output("tb-page", "children"),
-    Input("global-tab", "value"),
+    Output('tb-page', 'children'),
+    Input('global-tab', 'value'),
 )
 def render_content(tab):
-    if tab == "tab-1":
+    if tab == 'tab-1':
         return main_page
-    elif tab == "tab-2":
-        return dbc.Container([country_page])
+    elif tab == 'tab-2':
+        return dbc.Container([
+            country_page
+        ])
 
 
 @callback(
@@ -167,14 +170,16 @@ def update_histogram(selected_year, selected_type, selected_value):
     else:
         y_column = "incidence_total"
 
-    filtered_df = filtered_df.sort_values(by=y_column, ascending=False).head(30)
+    filtered_df = filtered_df.sort_values(
+        by=y_column, ascending=False).head(30)
 
     title = f"Global tuberculosis trend in {selected_year}"
     fig = (
         alt.Chart(filtered_df, title=title, width="container")
         .mark_bar()
         .encode(
-            x=alt.X("country", title="Country", axis=alt.Axis(labels=False)).sort("-y"),
+            x=alt.X("country", title="Country",
+                    axis=alt.Axis(labels=False)).sort("-y"),
             y=alt.Y(
                 y_column,
                 title=(
