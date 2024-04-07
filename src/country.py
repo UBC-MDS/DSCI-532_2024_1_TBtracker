@@ -1,4 +1,5 @@
-from dash import dcc, Input, Output, callback, html
+from dash.exceptions import PreventUpdate
+from dash import dcc, Input, Output, callback
 import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
@@ -10,7 +11,6 @@ tb_data = pd.read_csv("data/preprocessing/tb_data.csv")
 
 
 def create_line_plot(df, x_column, y_columns, title, legend_names):
-    # Create a copy to not alter the original dataframe
     plot_df = df.copy()
 
     # Rename the columns for the legend
@@ -46,6 +46,9 @@ def create_line_plot(df, x_column, y_columns, title, legend_names):
 )
 def update_plots(selected_country):
     # Filter the data based on the selected country
+    print("selected_country:"+selected_country)
+    # if not selected_country:
+    #     selected_country = "Canada"
     filtered_data = tb_data[tb_data['country'] == selected_country]
 
     # Mapping of original column names to human-readable names
@@ -110,8 +113,10 @@ risk_facts_graph = dbc.Container([
 
         )
     ], style={'width': '48%', 'display': 'inline-block'}),
-
-    dcc.Graph(id='indicator-graphic'),
+    dbc.Row([
+        dcc.Graph(id='indicator-graphic'),
+        dcc.Graph(id='pie-chart')
+    ])
 ])
 
 # Define the layout for the country-specific page with graphs in a row
@@ -134,7 +139,7 @@ country_page = dbc.Container(
         dbc.Row([
             dbc.Col([
                 country_page_layout,
-                risk_facts_graph  # This is your existing container for the risk factor graph and dropdowns
+                risk_facts_graph
             ])
         ])
     ],
@@ -175,5 +180,68 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
             trace.name = custom_labels[trace.name]
 
     fig.update_layout(legend_title_text='Sex')
+
+    return fig
+
+
+# Load the preprocessed data once at the start to avoid reloading it on each callback.
+preprocessed_rf_data = pd.read_csv("data/preprocessing/rf_type_data.csv")
+
+
+@callback(
+    Output('pie-chart', 'figure'),
+    [
+        Input('rf-country-dropdown', 'value'),
+        Input('rf-sex-dropdown', 'value'),
+        Input('rf-age-dropdown', 'value')
+    ]
+)
+def update_pie_chart(country_value, sex_value, age_values):
+    # If no country is selected, do not update the chart
+    if not country_value:
+        raise PreventUpdate
+
+    # Filter the data for the selected country
+    country_data = preprocessed_rf_data[preprocessed_rf_data['country']
+                                        == country_value]
+
+    # Further filter for sex if provided
+    if sex_value:
+        country_data = country_data[country_data['sex'] == sex_value]
+
+    # Further filter for age groups if provided
+    if age_values:
+        country_data = country_data[country_data['age_group'].isin(age_values)]
+
+    # Prepare the data for the pie chart
+    risk_factors_sums = country_data[[
+        'alc', 'dia', 'hiv', 'smk', 'und']].sum()
+
+    # Create a dictionary for human-readable risk factor names
+    risk_factor_names = {
+        'alc': 'Alcohol Use',
+        'dia': 'Diabetes',
+        'hiv': 'HIV',
+        'smk': 'Smoking',
+        'und': 'Undernourishment'
+    }
+
+    # Prepare the data for the pie chart with human-readable names
+    pie_data = pd.DataFrame({
+        'Risk Factor': [risk_factor_names.get(x, x) for x in risk_factors_sums.index],
+        'Count': risk_factors_sums.values
+    })
+
+    # Create the pie chart using the aggregated data
+    fig = px.pie(
+        pie_data,
+        names='Risk Factor',
+        values='Count',
+        title='Risk Factors Distribution'
+    )
+
+    # Customize the layout of the pie chart
+    fig.update_traces(textinfo='percent+label')
+    fig.update_layout(margin=dict(t=0, l=0, r=0, b=0))
 
     return fig

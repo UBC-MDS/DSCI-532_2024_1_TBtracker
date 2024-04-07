@@ -63,5 +63,22 @@ order_age = ['0-4', '5-14', '15-24', '25-34', '35-44', '45-54', '55-64', '65plus
 rf_data_preprocess['age_group'] = pd.Categorical(rf_data_preprocess['age_group'], categories=order_age, ordered=True)
 rf_data_preprocess = rf_data_preprocess.sort_values('age_group')
 
-
 (rf_data_preprocess.to_csv("data/preprocessing/rf_data.csv", index=False))
+
+
+# Filter the dataset for the year 2022
+filtered_data_2022 = rf_data[rf_data['year'] == 2022]
+
+# Pivot the 'risk_factor' column into separate columns and sum the values for the 'best' estimate
+pivot_data = filtered_data_2022.pivot_table(
+    index='country',
+    columns='risk_factor',
+    values='best',
+    aggfunc='sum'
+).reset_index()
+
+# Fill NaN values with 0, assuming missing values mean no reported incidences
+pivot_data.fillna(0, inplace=True)
+
+# Save the preprocessed data for the pie chart visualization
+(pivot_data.to_csv("data/preprocessing/rf_type_data.csv", index=False))
