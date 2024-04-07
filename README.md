@@ -2,12 +2,12 @@
 
 ## Table of Contents
 
-- [About the Project](#about-the-project)
+- [About the Project](#what-are-we-doing)
 - [Access the Application](#access-the-application)
 - [Data Sources and Structure](#data-sources-and-structure)
-- [Application Features](#application-features)
+- [Application Features](#dashboard-functionality-overview)
 - [How to Contribute](#how-to-contribute)
-- [Running the Application Locally](#run-locally)
+- [Run the Application Locally](#run-locally)
 - [Stakeholders](#stakeholders)
 
 ## What are we doing?
