@@ -67,11 +67,19 @@ rf_data_preprocess = rf_data_preprocess.sort_values('age_group')
 
 
 # Filter the dataset for the year 2022
+# Filter data for the year 2022
 filtered_data_2022 = rf_data[rf_data['year'] == 2022]
 
-# Pivot the 'risk_factor' column into separate columns and sum the values for the 'best' estimate
+# Filter data based on age_group and sex criteria
+filtered_data_2022 = filtered_data_2022.loc[
+    (
+        (filtered_data_2022["age_group"].isin(['all', '18plus', '15plus'])) &
+        (filtered_data_2022["sex"] == 'a')
+    )
+]
+
 pivot_data = filtered_data_2022.pivot_table(
-    index='country',
+    index=['country'],
     columns='risk_factor',
     values='best',
     aggfunc='sum'
