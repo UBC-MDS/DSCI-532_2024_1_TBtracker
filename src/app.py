@@ -4,6 +4,7 @@ from .country import country_page  # Import the app
 import pandas as pd
 import altair as alt
 import dash_vega_components as dvc
+import os
 
 
 # Data
@@ -13,6 +14,8 @@ tb_data = pd.read_csv("data/preprocessing/tb_data.csv")
 world_url = "https://vega.github.io/vega-datasets/data/world-110m.json"
 
 title = html.H1("Global Tuberculosis Trends", style={"textAlign": "center"})
+
+build_version = os.getenv('DEPLOY_DATETIME') #Set in render.com build step
 
 global_widgets_metric = dcc.RadioItems(
     id="radio-1",
@@ -54,6 +57,17 @@ global_tab = dcc.Tab(label="Global Data", value="tab-1", children=[global_tab_co
 country_tab = dcc.Tab(label="Country-Specific", value="tab-2")
 total_tab = dcc.Tabs(id="global-tab", value="tab-1", children=[global_tab, country_tab])
 
+
+build_info = html.Div([
+        html.H4("ABOUT"),
+        html.P("TBTracker uses data from WHO's global tuberculosis platform to visualize incidence and mortality rates across \
+                countries. Data was collected from the 2023 report, which includes data up to (but not including) 2023.", style={"font-size":"0.8em"}),
+        html.P("App was created by Sandra Gross, Sean McKay, Hina Bandukwala, and Yiwei Zhang", style={"font-size":"0.8em"}),
+        html.A("Github Repo", href="https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker", style={"font-size":"0.8em"}),
+        html.P(f"Last build was { build_version if build_version else ''}", style={"font-size":"0.8em"})
+])
+
+
 main_page = dbc.Container(
     [
         dbc.Row(
@@ -74,8 +88,9 @@ main_page = dbc.Container(
                         html.Br(),
                         html.Br(),
                         html.Br(),
-                        html.P("Hello"),
-                    ]
+                        
+                        build_info
+                    ], md=2
                 ),
                 dbc.Col(
                     [dbc.Row(dbc.Col(geo_chart)), dbc.Row(dbc.Col(histogram))], md=10
