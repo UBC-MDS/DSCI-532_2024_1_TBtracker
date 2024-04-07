@@ -2,22 +2,22 @@
 
 ## Table of Contents
 
-- [About the Project](#about-the-project)
+- [About the Project](#what-are-we-doing)
 - [Access the Application](#access-the-application)
 - [Data Sources and Structure](#data-sources-and-structure)
-- [Application Features](#application-features)
+- [Application Features](#dashboard-functionality-overview)
 - [How to Contribute](#how-to-contribute)
-- [Running the Application Locally](#run-locally)
+- [Run the Application Locally](#run-locally)
 - [Stakeholders](#stakeholders)
 
 ## What are we doing?
 
-![image](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/assets/18610590/acab8f88-a3c3-44ee-8f8a-49fd29280461)
+![Demo GIF](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/blob/main/img/demo.gif?raw=true)
 
 We're students from the UBC Master of Data Science program, and we've developed The Global Tuberculosis Tracker as a resource for easy access to global TB trends. This tool is designed for NGOs, policymakers, and public health organizations to streamline the analysis of TB incidence, its trends, and associated risk factors through straightforward visualizations. By leveraging data from the WHO, our application supports well-informed decision-making in the battle against TB, emphasizing the disease's progression and its association with risk factors such as HIV. Our objective is to equip stakeholders with precise data to aid strategic planning and intervention efforts.
 
 
-## Dahsboard Functionality Overview
+## Dashboard Functionality Overview
 
 Our dashboard provides an interactive visualization of WHO Tuberculosis (TB) data across global and country-specific levels. Here is an outline of its capabilities:
 - Geospatial Heatmap: A world map visualizes TB 'Incidence' or 'Mortality' rates by country for a selected year. The map allows for two modes of data representation—absolute numbers or rates relative to population size.
