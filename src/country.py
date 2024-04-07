@@ -18,7 +18,9 @@ case_fatality_ratio_plot = dcc.Graph(id="tb_case_fatality_ratio_plot")
 hiv_coinfection_plot = dcc.Graph(id="tb_hiv_coinfection_plot")
 risk_fac_graph = dcc.Graph(id="indicator-graphic")
 risk_pie_chart = dcc.Graph(id="rf-pie-chart")
-title = html.H1(id="page-title", children="Global Tuberculosis Trends")
+title = html.H1(id="page-title", style={"textAlign": "center"})
+risk_fac_graph_title = html.H4("TB Incidence by Demographic Group (2022)", style={"textAlign": "center"})
+risk_fac_pie_title = html.H4("TB Incidence by Risk Factor (2022)", style={"textAlign": "center"})
 
 
 def create_line_plot(df, x_column, y_columns, title, legend_names):
@@ -51,9 +53,13 @@ def create_line_plot(df, x_column, y_columns, title, legend_names):
 
 country_page = dbc.Container(
     children=[
-        dbc.Row([title]),
+        dbc.Row([
+            dbc.Col([title, html.H5("Select Country:")])
+            ]),
         dbc.Row(
-            [dbc.Col(country_dropdown, width=4)],
+            [
+                dbc.Col([country_dropdown], width=4, style={'padding-top': '1%'}),
+            ],
             justify="start",
         ),
         dbc.Row(
@@ -65,12 +71,15 @@ country_page = dbc.Container(
             className="mb-4",
         ),
         html.Br(),
-        html.H4("TB Incidence by Demographic Group (2022)"),
+        dbc.Row([
+            dbc.Col([risk_fac_graph_title, html.H5("Filters:")]),
+            dbc.Col([risk_fac_pie_title]),
+        ]),
         dbc.Row(
             [
-                dbc.Col(sex_dropdown, width=4),
+                dbc.Col(sex_dropdown, width=2),
                 dbc.Col(age_dropdown, width=4),
-            ]
+            ], style={'padding-top': '1%'}
         ),
         dbc.Row(
             [
@@ -198,7 +207,6 @@ def update_pie_chart(country_value, sex_value, age_values):
                                         == country_value]
 
     columns_except_country = [col for col in country_data.columns if col != 'country']
-    print(columns_except_country)
 
     # Prepare the data for the pie chart
     risk_factors_sums = country_data[columns_except_country].sum()

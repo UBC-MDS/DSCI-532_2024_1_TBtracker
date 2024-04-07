@@ -49,15 +49,20 @@ histogram = dvc.Vega(
     style={"width": "100%"}
 )
 
-slider_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
-global_tab_content = html.Div([title])
-global_tab = dcc.Tab(label="Global Data", value="tab-1", children=[global_tab_content])
-country_tab = dcc.Tab(label="Country-Specific", value="tab-2")
-total_tab = dcc.Tabs(id="global-tab", value="tab-1", children=[global_tab, country_tab])
+dropdown_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
+
+global_tab = dcc.Tab(label="Global Data", value="tab-1", 
+                     selected_style={'background-color' : '#cee3eb'}, style={'background-color' : '#dfebed'})
+
+country_tab = dcc.Tab(label="Country-Specific", value="tab-2",
+                      selected_style={'background-color' : '#cee3eb'}, style={'background-color' : '#dfebed'})
+
+total_tab = dcc.Tabs(id="global-tab", value="tab-1", children=[global_tab, country_tab],
+                     style={"padding" : "10px"})
 
 
 build_info = html.Div([
-        html.H4("ABOUT"),
+        html.H4("ABOUT", style={'padding-top': '10%'}),
         html.P("TBTracker uses data from WHO's global tuberculosis platform to visualize incidence and mortality rates across \
                 countries. Data was collected from the 2023 report, which includes data up to (but not including) 2023.", style={"font-size":"0.8em"}),
         html.P("App was created by Sandra Gross, Sean McKay, Hina Bandukwala, and Yiwei Zhang", style={"font-size":"0.8em"}),
@@ -67,28 +72,27 @@ build_info = html.Div([
 
 
 main_page = dbc.Container(
-    [
+    [   
+        dbc.Row([title]),
         dbc.Row(
             [
                 dbc.Col(
                     [
-                        html.H4("FILTERS"),
-                        dbc.Label("Scale"),
+                        html.H4("FILTERS", style={'padding-top': '10%'}),
+                        dbc.Label("Scale", style={'font-weight': 'bold', 'padding-top': '10%'}),
                         global_widgets_metric,
                         html.Br(),
-                        dbc.Label("Metric"),
+                        dbc.Label("Metric", style={'font-weight': 'bold', 'padding-top': '10%'}),
                         global_widgets_var,
                         html.Br(),
-                        dbc.Label("Year"),
-                        slider_year,
+                        dbc.Label("Year", style={'font-weight': 'bold', 'padding-top': '10%'}),
+                        dropdown_year,
                         html.Br(),
                         html.Br(),
                         html.Br(),
                         html.Br(),
-                        html.Br(),
-                        
                         build_info
-                    ], md=2
+                    ], md=2, style={'background-color' : '#dfebed'}
                 ),
                 dbc.Col(
                     [dbc.Row(dbc.Col(geo_chart)), dbc.Row(dbc.Col(histogram))], md=10
@@ -98,15 +102,10 @@ main_page = dbc.Container(
     ]
 )
 
+layout = dbc.Container(
+    [total_tab, dcc.Store(id="memory-output"), dbc.Container(id="tb-page")]
+)
 
-global_tab = dbc.Container([total_tab])
-
-layout = dbc.Container([
-    title,
-    global_tab,
-    dcc.Store(id='memory-output'),
-    dbc.Container(id='tb-page')
-])
 
 # This has to be done in a separate callback than below
 # Otherwise the rf-country-dropdown is not yet defined before we switch tabs
@@ -126,7 +125,7 @@ def update_dropdown(data):
     prevent_initial_call=True
 )
 def render_content(data):
-    if "selected_country" in data and data["selected_country"]:
+    if data is not None and "selected_country" in data and data["selected_country"]:
         return ["tab-2", str(data["selected_country"]["country"][0])]
     else:
         return [no_update, "Canada"]
@@ -221,17 +220,27 @@ def update_geofigure(selected_year, selected_type, selected_value):
     else:
         y_column = "incidence_total"
 
-    geo_chart = alt.Chart(alt.topo_feature(world_url, "countries"), height=400, width="container").mark_geoshape(
-        stroke="#aaa", strokeWidth=0.25
-    ).encode(
-        color=alt.Color(f"{y_column}:Q",
-                        title=f"{'Incidence' if selected_value == 'incidence' else 'Mortality'} {'Absolute' if selected_type == 'absolute' else 'Relative'}"),
-        tooltip=["country:N", f"{y_column}:Q"]
-    ).transform_lookup(
-        lookup='id',
-        from_=alt.LookupData(filtered_df, 'iso_numeric', [y_column, "country"])
-    ).add_params(
-        alt.selection_point(fields=["country"], name="selected_country")
-    ).project(scale=150)
-
+    geo_chart = (
+        alt.Chart(
+            alt.topo_feature(world_url, "countries"), height=400, width="container"
+        )
+        .mark_geoshape(stroke="#aaa", strokeWidth=0.25)
+        .encode(
+            color=alt.Color(
+                f"{y_column}:Q",
+                title=f"{'Incidence' if selected_value == 'incidence' else 'Mortality'} {'Absolute' if selected_type == 'absolute' else 'Relative'}",
+            ),
+            tooltip=["country:N", f"{y_column}:Q"],
+        )
+        .transform_lookup(
+            lookup="id",
+            from_=alt.LookupData(filtered_df, "iso_numeric", [y_column, "country"]),
+        )
+        .add_params(alt.selection_point(fields=["country"], name="selected_country")
+        )
+        .project(scale=180).properties(
+            height=450,
+            width="container"
+        )
+    )
     return geo_chart.to_dict()
