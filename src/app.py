@@ -34,85 +34,72 @@ global_widgets_var = dcc.RadioItems(
     labelStyle={"display": "block"},
 )
 
-geo_chart = dvc.Vega(
-    id="geo_chart",
-    spec={},
-    signalsToObserve=["selected_country"],
-    style={"width": "100%"},
-)
+geo_chart = dvc.Vega(id="geo_chart",
+                     spec={},
+                     signalsToObserve=["selected_country"],
+                     style={"width": "100%"})
 
 histogram = dvc.Vega(
     id="tb_histogram",
     opt={"renderer": "svg", "actions": False},
     spec={},
-    style={"width": "100%"},
+    style={"width": "100%"}
 )
 
-slider_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
+slider_year = dcc.Dropdown(
+    id='year', options=tb_data.year, value=2022)
 
 
-main_page = dbc.Container(
-    [
-        dbc.Row(
-            [
-                dbc.Col(
-                    [
-                        dbc.Label("Scale"),
-                        global_widgets_metric,
-                        dbc.Label("Metric"),
-                        global_widgets_var,
-                        dbc.Label("Year"),
-                        slider_year,
-                    ]
-                ),
-                dbc.Col(
-                    [dbc.Row(dbc.Col(geo_chart)), dbc.Row(dbc.Col(histogram))], md=8
-                ),
-            ]
-        )
-    ]
-)
+main_page = dbc.Container([
+    dbc.Row([
+        dbc.Col([dbc.Label('Scale'),
+                global_widgets_metric,
+                dbc.Label('Metric'),
+                global_widgets_var,
+                dbc.Label('Year'),
+                slider_year]),
+        dbc.Col([
+            dbc.Row(dbc.Col(geo_chart)),
+            dbc.Row(dbc.Col(histogram))
+        ], md=8)
+    ])
+])
 
-global_tab_content = html.Div(
-    [
-        title
-        # Include the rest of the content for the global tab here, like risk_facts_graph or other components
-    ]
-)
 
-global_tab = dbc.Container(
-    [
-        dcc.Tabs(
-            id="global-tab",
-            value="tab-1",
-            children=[
-                dcc.Tab(
-                    label="Global Data", value="tab-1", children=[global_tab_content]
-                ),
-                dcc.Tab(label="Country-Specific", value="tab-2"),
-            ],
-        ),
-    ]
-)
+global_tab = dbc.Container([
+    dcc.Tabs(
+        id="global-tab",
+        value="tab-1",
+        children=[
+            dcc.Tab(label='Global Data', value='tab-1'),
+            dcc.Tab(label='Country-Specific', value='tab-2'),
+        ]),
+])
 
-layout = dbc.Container(
-    [global_tab, dcc.Store(id="memory-output"), dbc.Container(id="tb-page")]
-)
+layout = dbc.Container([
+    title,
+    global_tab,
+    dcc.Store(id='memory-output'),
+    dbc.Container(id='tb-page')
+])
 
 
 # This has to be done in a separate callback than below
 # Otherwise the rf-country-dropdown is not yet defined before we switch tabs
-@callback(Output("rf-country-dropdown", "value"), Input("memory-output", "data"))
+@callback(
+    Output('rf-country-dropdown', 'value'),
+    Input('memory-output', 'data')
+)
 def update_dropdown(data):
     return data
 
 
 # Returns a no_update if selected country is not none otherwise we enter a callback loop
 @callback(
-    Output("global-tab", "value"),
-    Output("memory-output", "data"),
-    Input("geo_chart", "signalData"),
-    prevent_initial_call=True,
+    Output('global-tab', 'value'),
+    Output('memory-output', 'data'),
+    Input('geo_chart', 'signalData'),
+    prevent_initial_call=True
 )
 def render_content(data):
     if "selected_country" in data and data["selected_country"]:
@@ -122,14 +109,16 @@ def render_content(data):
 
 
 @callback(
-    Output("tb-page", "children"),
-    Input("global-tab", "value"),
+    Output('tb-page', 'children'),
+    Input('global-tab', 'value'),
 )
 def render_content(tab):
-    if tab == "tab-1":
+    if tab == 'tab-1':
         return main_page
-    elif tab == "tab-2":
-        return dbc.Container([country_page])
+    elif tab == 'tab-2':
+        return dbc.Container([
+            country_page
+        ])
 
 
 @callback(
@@ -158,14 +147,16 @@ def update_histogram(selected_year, selected_type, selected_value):
     else:
         y_column = "incidence_total"
 
-    filtered_df = filtered_df.sort_values(by=y_column, ascending=False).head(30)
+    filtered_df = filtered_df.sort_values(
+        by=y_column, ascending=False).head(30)
 
     title = f"Global tuberculosis trend in {selected_year}"
     fig = (
         alt.Chart(filtered_df, title=title, width="container")
         .mark_bar()
         .encode(
-            x=alt.X("country", title="Country", axis=alt.Axis(labels=False)).sort("-y"),
+            x=alt.X("country", title="Country",
+                    axis=alt.Axis(labels=False)).sort("-y"),
             y=alt.Y(
                 y_column,
                 title=(
@@ -206,24 +197,17 @@ def update_geofigure(selected_year, selected_type, selected_value):
     else:
         y_column = "incidence_total"
 
-    geo_chart = (
-        alt.Chart(
-            alt.topo_feature(world_url, "countries"), height=400, width="container"
-        )
-        .mark_geoshape(stroke="#aaa", strokeWidth=0.25)
-        .encode(
-            color=alt.Color(
-                f"{y_column}:Q",
-                title=f"{'Incidence' if selected_value == 'incidence' else 'Mortality'} {'Absolute' if selected_type == 'absolute' else 'Relative'}",
-            ),
-            tooltip=["country:N", f"{y_column}:Q"],
-        )
-        .transform_lookup(
-            lookup="id",
-            from_=alt.LookupData(filtered_df, "iso_numeric", [y_column, "country"]),
-        )
-        .add_params(alt.selection_point(fields=["country"], name="selected_country"))
-        .project(scale=150)
-    )
+    geo_chart = alt.Chart(alt.topo_feature(world_url, "countries"), height=400, width="container").mark_geoshape(
+        stroke="#aaa", strokeWidth=0.25
+    ).encode(
+        color=alt.Color(f"{y_column}:Q",
+                        title=f"{'Incidence' if selected_value == 'incidence' else 'Mortality'} {'Absolute' if selected_type == 'absolute' else 'Relative'}"),
+        tooltip=["country:N", f"{y_column}:Q"]
+    ).transform_lookup(
+        lookup='id',
+        from_=alt.LookupData(filtered_df, 'iso_numeric', [y_column, "country"])
+    ).add_params(
+        alt.selection_point(fields=["country"], name="selected_country")
+    ).project(scale=150)
 
     return geo_chart.to_dict()
