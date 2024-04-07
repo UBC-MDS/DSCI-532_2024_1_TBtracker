@@ -15,7 +15,7 @@ world_url = "https://vega.github.io/vega-datasets/data/world-110m.json"
 
 title = html.H1("Global Tuberculosis Trends", style={"textAlign": "center"})
 
-build_version = os.getenv('DEPLOY_DATETIME') #Set in render.com build step
+deploy_time = os.getenv('DEPLOY_DATETIME') #Set in render.com build step
 
 global_widgets_metric = dcc.RadioItems(
     id="radio-1",
@@ -64,7 +64,7 @@ build_info = html.Div([
                 countries. Data was collected from the 2023 report, which includes data up to (but not including) 2023.", style={"font-size":"0.8em"}),
         html.P("App was created by Sandra Gross, Sean McKay, Hina Bandukwala, and Yiwei Zhang", style={"font-size":"0.8em"}),
         html.A("Github Repo", href="https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker", style={"font-size":"0.8em"}),
-        html.P(f"Last build was { build_version if build_version else ''}", style={"font-size":"0.8em"})
+        html.P(f"Last build was { deploy_time if deploy_time else '2024-04-06'}", style={"font-size":"0.8em"})
 ])
 
 
