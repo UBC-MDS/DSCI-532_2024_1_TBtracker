@@ -18,7 +18,7 @@
 
 ## Access the Application
 
-Visit the live application [here!](#) (Link to be updated)
+Visit the live application [here!](https://dsci-532-2024-1-tbtracker.onrender.com/)
 
 ## Data Sources and Structure
 
