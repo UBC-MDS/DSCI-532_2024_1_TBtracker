@@ -74,7 +74,8 @@ filtered_data_2022 = rf_data[rf_data['year'] == 2022]
 filtered_data_2022 = filtered_data_2022.loc[
     (
         (filtered_data_2022["age_group"].isin(['all', '18plus', '15plus'])) &
-        (filtered_data_2022["sex"] == 'a')
+        (filtered_data_2022["sex"] == 'a') &
+        (filtered_data_2022["risk_factor"] != 'all')
     )
 ]
 
