@@ -13,4 +13,4 @@ app.layout = global_layout
 # Check if the file is executed as main (useful for running the server from this file if needed)
 if __name__ == "__main__":
     app.run(port=8000, host="127.0.0.1",
-            debug=True, dev_tools_hot_reload=False)
+            debug=False, dev_tools_hot_reload=False)
