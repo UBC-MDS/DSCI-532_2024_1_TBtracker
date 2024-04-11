@@ -1,10 +1,12 @@
 from dash import Input, Output, callback, no_update
 from dash.exceptions import PreventUpdate
-from components.country import country_component
-from components.world import world_component
+from .components.country import country_component
+from .components.world import world_component
 from .utils import world_url, create_line_plot
+
 from .data import tb_data, rf_data, preprocessed_rf_data
 
+import pandas as pd
 import altair as alt
 import plotly.express as px
 

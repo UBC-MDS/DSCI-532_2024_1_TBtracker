@@ -2,7 +2,6 @@ from dash import dcc, html
 import dash_bootstrap_components as dbc
 from ..data import rf_data
 
-
 # Function to create line plots
 country_dropdown = dcc.Dropdown(
     rf_data["country"].unique(), id="rf-country-dropdown")
