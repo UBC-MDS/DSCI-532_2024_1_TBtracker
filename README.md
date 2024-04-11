@@ -1,21 +1,28 @@
-# DSCI-532_2024_1_TBtracker - Global Tuberculosis Tracker
+# Tuberculosis Tracker <img src="img/Logo.png" align="right" width=175 height=175 alt="" />
 
-## Table of Contents
+[![GitHub issues](https://img.shields.io/github/issues/UBC-MDS/DSCI-532_2024_1_TBtracker.svg)](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/UBC-MDS/DSCI-532_2024_1_TBtracker.svg)](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/commits/main)
+[![GitHub release](https://img.shields.io/github/release/UBC-MDS/DSCI-532_2024_1_TBtracker.svg)](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/releases)
 
-- [About the Project](#what-are-we-doing)
-- [Access the Application](#access-the-application)
+
+
+Visualize global and country-specific trends in tuberculosis incidence and mortality over time.
+
+For easy navigation, you can click on the links below to jump directly to a specific section or simply scroll through the page.
+
+- [About the Project](#about-the-project)
+- [Usage for users](#usage-for-users)
 - [Data Sources and Structure](#data-sources-and-structure)
-- [Application Features](#dashboard-functionality-overview)
+- [Usage for Users](#usage-for-users)
+- [Usage for Developers](#usage-for-developers)
 - [How to Contribute](#how-to-contribute)
-- [Run the Application Locally](#run-locally)
-- [Stakeholders](#stakeholders)
+- [Contributors](#contributors)
 
-## What are we doing?
+## About the Project
 
 ![Demo GIF](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/blob/main/img/demo.gif?raw=true)
 
 We're students from the UBC Master of Data Science program, and we've developed The Global Tuberculosis Tracker as a resource for easy access to global TB trends. This tool is designed for NGOs, policymakers, and public health organizations to streamline the analysis of TB incidence, its trends, and associated risk factors through straightforward visualizations. By leveraging data from the WHO, our application supports well-informed decision-making in the battle against TB, emphasizing the disease's progression and its association with risk factors such as HIV. Our objective is to equip stakeholders with precise data to aid strategic planning and intervention efforts.
-
 
 ## Dashboard Functionality Overview
 
@@ -29,39 +36,20 @@ Our dashboard provides an interactive visualization of WHO Tuberculosis (TB) dat
     -  Pie Chart: A pie chart presents the distribution of TB incidence by various risk factors, such as smoking and alcohol use, providing insights into potential areas for public health interventions.
 Each visualization has been designed with user interactivity in mind, offering the ability to customize the data displayed according to demographic and risk factor breakdowns.
 
-## Access the Application
+## Usage for Users
 
-Visit the live application [here!](https://dsci-532-2024-1-tbtracker.onrender.com/)
+The live application can be visited [here!](https://dsci-532-2024-1-tbtracker.onrender.com/)
+
+The dashboard features a sidebar for user input and a main section for data display. In the sidebar, users can select the metric type (absolute or relative), the variable of interest (incidence or mortality), and the desired time range. The data display section includes an interactive global map where hovering over a country provides a brief statistical summary for that country and its global context. Clicking on a specific country directs users to a detailed tab, offering in-depth information about that country's risk factors and historical trends. Additionally, users can directly access this country-specific information through the "Country-Specific" tab in the top menu.
+In this tab, you can filter for desired risk factors using the dropdown menu or by clicking on elements within the pie chart's legend.
 
 ## Data Sources and Structure
 
-The application leverages two WHO datasets covering TB data for 217 countries from 2000 to 2022. Key data points include:
+The application leverages two WHO datasets covering TB data for 217 countries from 2000 to 2022. Key data points include geographic information, annual TB incidence and mortality (with and without HIV), risk Factors such as age, sex, as well alcohol abuse, diabetes, HIV, smoking, and undernourishment for 2022.
 
-- **Geographic and Demographic Information:** Country ISO2 codes.
-- **Annual TB Incidence and Mortality:** With and without HIV, including absolute estimates and confidence intervals.
-- **Risk Factors:** Data on age, sex, and specific risk factors like harmful use of alcohol, diabetes, HIV, smoking, and undernourishment for 2022.
-- **Additional Insights:** TB-HIV coinfection rates, case fatality ratios, and more.
+## Usage for Developers
 
-This dataset, encompassing over two decades, provides a comprehensive overview of the TB epidemiological landscape globally, enabling detailed analysis and insights into the disease's trends and associated risk factors.
-
-## Application Features
-
-**Key Features Include:**
-
-- **Interactive Global Map:** Visual representation of TB incidence and mortality rates across countries, with options to filter by year and view detailed country profiles.
-- **Historical Trends and Distribution:** Analysis of global TB trends over time, allowing users to track changes in incidence, mortality, and co-infection rates.
-- **Risk Factor Breakdown:** Detailed insights into the impact of various risk factors on TB incidence, offering a deeper understanding of the disease's dynamics.
-- **Custom Data Views:** Options to view data in absolute terms or normalized by population, alongside the ability to toggle between TB metrics.
-
-Developed with accessibility and user engagement in mind, the tracker aims to provide an intuitive platform for exploring and understanding TB data.
-
-## How to Contribute
-
-Contributions are welcome! Please refer to our [Contributing Guidelines](/CONTRIBUTING.md). We accept contributions ranging from data updates to feature enhancements. All contributors are expected to follow our [Code of Conduct](/CODE_OF_CONDUCT.md).
-
-Given the GitHub repository URL and the details for the `environment.yml` file, here's how you can adjust the instructions to run the project locally, including how to install dependencies using Conda:
-
-## Run Locally
+### Installation For Local Development
 
 To run the **Global Tuberculosis Tracker** project locally on your machine, follow these steps:
 
@@ -109,16 +97,11 @@ To run the **Global Tuberculosis Tracker** project locally on your machine, foll
     This command will start the application. Follow any on-screen instructions to access it in your web browser.
     By default, you will see `Dash is running on http://127.0.0.1:8000/`. So just copy and paste the URL into your browser.
 
-By following these instructions, users will be able to set up and run the **Global Tuberculosis Tracker** application locally, ensuring they have all the required dependencies installed through the Conda environment named `TBtracker`.
+## How to Contribute
 
-## Support
+Contributions are welcome! Please refer to our [Contributing Guidelines](/CONTRIBUTING.md). We accept contributions ranging from data updates to feature enhancements. All contributors are expected to follow our [Code of Conduct](/CODE_OF_CONDUCT.md).
 
-If you want to report a problem or suggest an enhancement please open an issue on this github repository.
+## Contributors
 
-
-## Stakeholders
-- [Sandra Gross](https://github.com/sandygross)
-- [Sean Mckay](https://github.com/sean-m-mckay)
-- [Hina Bandukwala](https://github.com/hbandukw)
-- [Yiwei Zhang](https://github.com/zywkloo)
+Sandra Gross, Sean McKay, Hina Bandukwala, Yiwei Zhang
 
