@@ -1,94 +1,155 @@
+from dash import Input, Output, callback, no_update
 from dash.exceptions import PreventUpdate
-from dash import dcc, Input, Output, callback, html
-import dash_bootstrap_components as dbc
+from .components.country import country_component
+from .components.world import world_component
+from .utils import world_url, create_line_plot
+
+from .data import tb_data, rf_data, preprocessed_rf_data
+
 import pandas as pd
+import altair as alt
 import plotly.express as px
 
-rf_data = pd.read_csv("data/preprocessing/rf_data.csv")
-tb_data = pd.read_csv("data/preprocessing/tb_data.csv")
+# All callbacks needed for the app
 
-# Function to create line plots
-country_dropdown = dcc.Dropdown(rf_data["country"].unique(), id="rf-country-dropdown")
-sex_dropdown = dcc.Dropdown(rf_data["sex"].unique(), id="rf-sex-dropdown")
-age_dropdown = dcc.Dropdown(
-    rf_data["age_group"].unique(), id="rf-age-dropdown", multi=True
+# This has to be done in a separate callback than below
+# Otherwise the rf-country-dropdown is not yet defined before we switch tabs
+
+
+@callback(
+    Output('rf-country-dropdown', 'value'),
+    Input('memory-output', 'data')
 )
-mortality_incidence_plot = dcc.Graph(id="tb_mortality_incidence_plot")
-case_fatality_ratio_plot = dcc.Graph(id="tb_case_fatality_ratio_plot")
-hiv_coinfection_plot = dcc.Graph(id="tb_hiv_coinfection_plot")
-risk_fac_graph = dcc.Graph(id="indicator-graphic")
-risk_pie_chart = dcc.Graph(id="rf-pie-chart")
-title = html.H1(id="page-title", style={"textAlign": "center"})
-risk_fac_graph_title = html.H4("TB Incidence by Demographic Group (2022)", style={"textAlign": "center"})
-risk_fac_pie_title = html.H4("TB Incidence by Risk Factor (2022)", style={"textAlign": "center"})
+def update_dropdown(data):
+    return data
 
 
-def create_line_plot(df, x_column, y_columns, title, legend_names):
-    plot_df = df.copy()
+# Returns a no_update if selected country is not none otherwise we enter a callback loop
+@callback(
+    Output('global-tab', 'value'),
+    Output('memory-output', 'data'),
+    Input('geo_chart', 'signalData'),
+    prevent_initial_call=True
+)
+def render_content(data):
+    if data is not None and "selected_country" in data and data["selected_country"]:
+        return ["tab-2", str(data["selected_country"]["country"][0])]
+    else:
+        return [no_update, "Canada"]
 
-    # Rename the columns for the legend
-    for original_col, new_name in zip(y_columns, legend_names):
-        plot_df[new_name] = plot_df[original_col]
 
-    # Create the figure using the new column names for y-values
-    fig = px.line(plot_df, x=x_column, y=legend_names, title=title)
-    fig.update_layout(
-        xaxis_title="Year",
-        yaxis_title="Count",
-        legend=dict(
-            title="Legend",
-            title_font=dict(size=10),
-            font=dict(size=8),
-            x=1,  # Horizontally align to the right
-            y=0   # Vertically align to the bottom
-        ),
-        plot_bgcolor="white"
+@callback(
+    Output('tb-page', 'children'),
+    Input('global-tab', 'value'),
+)
+def render_content(tab):
+    if tab == 'tab-1':
+        return world_component
+    elif tab == 'tab-2':
+        return country_component
+
+
+@callback(
+    Output("tb_histogram", "spec"),
+    [
+        Input("year", "value"),
+        Input("radio-1", "value"),
+        Input("radio-2", "value"),
+    ],
+)
+def update_histogram(selected_year, selected_type, selected_value):
+    filtered_df = tb_data[tb_data["year"] == selected_year]
+
+    if selected_type == "absolute" and selected_value == "incidence":
+        y_column = "incidence_total"
+
+    elif selected_type == "relative" and selected_value == "incidence":
+        y_column = "incidence_rate"
+
+    elif selected_type == "absolute" and selected_value == "mortality":
+        y_column = "mortality_total"
+
+    elif selected_type == "relative" and selected_value == "mortality":
+        y_column = "mortality_rate"
+
+    else:
+        y_column = "incidence_total"
+
+    filtered_df = filtered_df.sort_values(
+        by=y_column, ascending=False).head(30)
+
+    title = f"Global tuberculosis trend in {selected_year}"
+    fig = (
+        alt.Chart(filtered_df, title=title, width="container")
+        .mark_bar()
+        .encode(
+            x=alt.X("country", title="Country",
+                    axis=alt.Axis(labels=False)).sort("-y"),
+            y=alt.Y(
+                y_column,
+                title=(
+                    f"{'Incidence' if selected_value == 'incidence' else 'Mortality'}",
+                    f"{'Absolute' if selected_type == 'absolute' else 'Relative'}",
+                ),
+            ),
+            tooltip=["country", y_column],
+        )
     )
 
-    # Optionally remove the original column names from the hover data
-    fig.update_traces(hovertemplate=None)
-
-    return fig
+    return fig.to_dict()
 
 
-country_page = dbc.Container(
-    children=[
-        dbc.Row([
-            dbc.Col([title, html.H5("Select Country:")])
-            ]),
-        dbc.Row(
-            [
-                dbc.Col([country_dropdown], width=4, style={'padding-top': '1%'}),
-            ],
-            justify="start",
-        ),
-        dbc.Row(
-            [
-                dbc.Col([mortality_incidence_plot], width=4),
-                dbc.Col([case_fatality_ratio_plot], width=4),
-                dbc.Col([hiv_coinfection_plot], width=4),
-            ],
-            className="mb-4",
-        ),
-        html.Br(),
-        dbc.Row([
-            dbc.Col([risk_fac_graph_title, html.H5("Filters:")]),
-            dbc.Col([risk_fac_pie_title]),
-        ]),
-        dbc.Row(
-            [
-                dbc.Col(sex_dropdown, width=2),
-                dbc.Col(age_dropdown, width=4),
-            ], style={'padding-top': '1%'}
-        ),
-        dbc.Row(
-            [
-                dbc.Col(risk_fac_graph, width=7), 
-                dbc.Col(risk_pie_chart, width=5)
-            ]
-        )
-    ], fluid=True
+@callback(
+    Output("geo_chart", "spec"),
+    [
+        Input("year", "value"),
+        Input("radio-1", "value"),
+        Input("radio-2", "value"),
+    ],
 )
+def update_geofigure(selected_year, selected_type, selected_value):
+    filtered_df = tb_data[tb_data["year"] == selected_year]
+
+    if selected_type == "absolute" and selected_value == "incidence":
+        y_column = "incidence_total"
+
+    elif selected_type == "relative" and selected_value == "incidence":
+        y_column = "incidence_rate"
+
+    elif selected_type == "absolute" and selected_value == "mortality":
+        y_column = "mortality_total"
+
+    elif selected_type == "relative" and selected_value == "mortality":
+        y_column = "mortality_rate"
+
+    else:
+        y_column = "incidence_total"
+
+    geo_chart = (
+        alt.Chart(
+            alt.topo_feature(world_url, "countries"), height=400, width="container"
+        )
+        .mark_geoshape(stroke="#aaa", strokeWidth=0.25)
+        .encode(
+            color=alt.Color(
+                f"{y_column}:Q",
+                title=f"{'Incidence' if selected_value == 'incidence' else 'Mortality'} {'Absolute' if selected_type == 'absolute' else 'Relative'}",
+            ),
+            tooltip=["country:N", f"{y_column}:Q"],
+        )
+        .transform_lookup(
+            lookup="id",
+            from_=alt.LookupData(filtered_df, "iso_numeric", [
+                                 y_column, "country"]),
+        )
+        .add_params(alt.selection_point(fields=["country"], name="selected_country")
+                    )
+        .project(scale=180).properties(
+            height=450,
+            width="container"
+        )
+    )
+    return geo_chart.to_dict()
 
 
 @callback(
@@ -139,6 +200,7 @@ def update_plots(selected_country):
 
     return mortality_incidence_fig, case_fatality_ratio_fig, hiv_coinfection_fig
 
+
 @callback(
     Output('indicator-graphic', 'figure'),
     Input('rf-country-dropdown', 'value'),
@@ -185,10 +247,6 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
     return fig
 
 
-# Load the preprocessed data once at the start to avoid reloading it on each callback.
-preprocessed_rf_data = pd.read_csv("data/preprocessing/rf_type_data.csv")
-
-
 @callback(
     Output('rf-pie-chart', 'figure'),
     [
@@ -206,7 +264,8 @@ def update_pie_chart(country_value, sex_value, age_values):
     country_data = preprocessed_rf_data[preprocessed_rf_data['country']
                                         == country_value]
 
-    columns_except_country = [col for col in country_data.columns if col != 'country']
+    columns_except_country = [
+        col for col in country_data.columns if col != 'country']
 
     # Prepare the data for the pie chart
     risk_factors_sums = country_data[columns_except_country].sum()
