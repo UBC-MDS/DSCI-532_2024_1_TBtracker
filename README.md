@@ -1,4 +1,4 @@
-# Tuberculosis Tracker <img src="img/Logo.png" align="right" width=125 height=125 alt="" />
+# Tuberculosis Tracker <img src="img/Logo.png" align="right" width=175 height=175 alt="" />
 
 Visualize global and country-specific trends in tuberculosis incidence and mortality over time.
 
