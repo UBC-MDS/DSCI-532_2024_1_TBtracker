@@ -1,5 +1,11 @@
 # Tuberculosis Tracker <img src="img/Logo.png" align="right" width=175 height=175 alt="" />
 
+[![GitHub issues](https://img.shields.io/github/issues/UBC-MDS/DSCI-532_2024_1_TBtracker.svg)](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/issues)
+[![GitHub last commit](https://img.shields.io/github/last-commit/UBC-MDS/DSCI-532_2024_1_TBtracker.svg)](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/commits/main)
+[![GitHub release](https://img.shields.io/github/release/UBC-MDS/DSCI-532_2024_1_TBtracker.svg)](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/releases)
+
+
+
 Visualize global and country-specific trends in tuberculosis incidence and mortality over time.
 
 For easy navigation, you can click on the links below to jump directly to a specific section or simply scroll through the page.
