@@ -34,7 +34,7 @@ geo_chart = dvc.Vega(
     id="geo_chart",
     spec={},
     signalsToObserve=["selected_country"],
-    style={"width": "100%"},
+    style={"width": "99%"},
 )
 
 dropdown_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
