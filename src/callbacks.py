@@ -26,7 +26,7 @@ def update_dropdown(data):
 
 # Returns a no_update if selected country is not none otherwise we enter a callback loop
 @callback(
-    Output('global-tab', 'value'),
+    Output('global-tab', 'active_tab'),
     Output('memory-output', 'data'),
     Input('geo_chart', 'signalData'),
     prevent_initial_call=True
@@ -40,7 +40,7 @@ def render_content(data):
 
 @callback(
     Output('tb-page', 'children'),
-    Input('global-tab', 'value'),
+    Input('global-tab', 'active_tab'),
 )
 def render_content(tab):
     if tab == 'tab-1':

@@ -6,7 +6,7 @@ from ..data import tb_data
 
 # Define the layout for the world_map page
 
-title = html.H1("Global Tuberculosis Trends", style={"textAlign": "center"})
+title = html.H1("Global Tuberculosis Trends", style={"textAlign": "left"})
 
 deploy_time = os.getenv('DEPLOY_DATETIME')  # Set in render.com build step
 
@@ -44,13 +44,13 @@ histogram = dvc.Vega(
 
 dropdown_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
 
-global_tab = dcc.Tab(label="Global Data", value="tab-1",
-                     selected_style={'background-color': '#cee3eb'}, style={'background-color': '#dfebed'})
+global_tab = dbc.Tab(label="Global Data", tab_id="tab-1",
+                     active_tab_style={'background-color': '#cee3eb'}, tab_style={'background-color': '#dfebed'})
 
-country_tab = dcc.Tab(label="Country-Specific", value="tab-2",
-                      selected_style={'background-color': '#cee3eb'}, style={'background-color': '#dfebed'})
+country_tab = dbc.Tab(label="Country-Specific", tab_id="tab-2",
+                      active_tab_style={'background-color': '#cee3eb'}, tab_style={'background-color': '#dfebed'})
 
-total_tab = dcc.Tabs(id="global-tab", value="tab-1", children=[global_tab, country_tab],
+total_tab = dbc.Tabs(id="global-tab", active_tab="tab-1", children=[global_tab, country_tab],
                      style={"padding": "10px"})
 
 
@@ -69,29 +69,25 @@ build_info = html.Div([
 
 world_component = dbc.Container(
     [
-        dbc.Row([title]),
         dbc.Row(
             [
                 dbc.Col(
                     [
-                        html.H4("FILTERS", style={'padding-top': '10%'}),
-                        dbc.Label("Scale", style={
-                                  'font-weight': 'bold', 'padding-top': '10%'}),
-                        global_widgets_metric,
-                        html.Br(),
-                        dbc.Label("Metric", style={
-                                  'font-weight': 'bold', 'padding-top': '10%'}),
+                        title,
+                        html.Hr(style={'color': 'black'}),
+                        dbc.Label("Metric", className = "filter-label"),
                         global_widgets_var,
                         html.Br(),
-                        dbc.Label("Year", style={
-                                  'font-weight': 'bold', 'padding-top': '10%'}),
+                        dbc.Label("Scale", className = "filter-label"),
+                        global_widgets_metric,
+                        html.Br(),
+                        dbc.Label("Year", className = "filter-label"),
                         dropdown_year,
                         html.Br(),
                         html.Br(),
                         html.Br(),
-                        html.Br(),
                         build_info
-                    ], md=2, style={'background-color': '#dfebed'}
+                    ], md=2, style={'background-color': '#CBC3E3'}
                 ),
                 dbc.Col(
                     [dbc.Row(dbc.Col(geo_chart)), dbc.Row(dbc.Col(histogram))], md=10
