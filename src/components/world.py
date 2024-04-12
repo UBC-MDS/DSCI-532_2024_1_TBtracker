@@ -35,14 +35,7 @@ geo_chart = dvc.Vega(
     id="geo_chart",
     spec={},
     signalsToObserve=["selected_country"],
-    style={"width": "100%"},
-)
-
-histogram = dvc.Vega(
-    id="tb_histogram",
-    opt={"renderer": "svg", "actions": False},
-    spec={},
-    style={"width": "100%"},
+    style={"width": "99%"},
 )
 
 dropdown_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
@@ -164,10 +157,16 @@ world_component = dbc.Container(
                     style={"background-color": "#CBC3E3"},
                 ),
                 dbc.Col(
-                    [dbc.Row(dbc.Col(geo_chart)), dbc.Row(dbc.Col(histogram))], md=10
+                    [
+                        geo_chart,
+                        html.P(
+                            "* Hovering over the countries displays summary statistics, and clicking on them navigates to a second tab with more detailed country-specific information",
+                            style={"text-align": "center", "font-size": "14px"},
+                        ),
+                    ]
                 ),
             ]
-        )
+        ),
     ],
     fluid=True,
 )
