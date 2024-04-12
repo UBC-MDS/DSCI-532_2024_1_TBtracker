@@ -8,6 +8,7 @@ app = Dash(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     suppress_callback_exceptions=True,
+    title="Tb tracker",
 )
 server = app.server
 app.layout = global_layout
