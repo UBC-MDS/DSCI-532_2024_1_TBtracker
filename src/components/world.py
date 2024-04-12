@@ -6,7 +6,8 @@ from ..data import tb_data
 
 # Define the layout for the world_map page
 
-title = html.H1("Global Tuberculosis Trends", style={"textAlign": "left", "padding-top" : "2%"})
+title_p1 = html.H1("Global", style={"textAlign": "left", "padding-top" : "2%"})
+title_p2 = html.H1("TB Trends", style={"textAlign": "left"})
 
 deploy_time = os.getenv('DEPLOY_DATETIME')  # Set in render.com build step
 
@@ -104,7 +105,8 @@ world_component = dbc.Container(
                 learn_more_popup,
                 dbc.Col(
                     [
-                        title,
+                        dbc.Row([title_p1]),
+                        dbc.Row([title_p2]),
                         html.Hr(style={'color': 'black', }),
                         dbc.Label("Metric", className = "filter-label"),
                         global_widgets_var,
