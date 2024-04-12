@@ -12,8 +12,8 @@ For easy navigation, you can click on the links below to jump directly to a spec
 
 - [About the Project](#about-the-project)
 - [Usage for users](#usage-for-users)
-- [Data Sources and Structure](#data-sources-and-structure)
 - [Usage for Users](#usage-for-users)
+- [Data Sources and Structure](#data-sources-and-structure)
 - [Usage for Developers](#usage-for-developers)
 - [How to Contribute](#how-to-contribute)
 - [Contributors](#contributors)
@@ -23,18 +23,6 @@ For easy navigation, you can click on the links below to jump directly to a spec
 ![Demo GIF](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/blob/main/img/demo.gif?raw=true)
 
 We're students from the UBC Master of Data Science program, and we've developed The Global Tuberculosis Tracker as a resource for easy access to global TB trends. This tool is designed for NGOs, policymakers, and public health organizations to streamline the analysis of TB incidence, its trends, and associated risk factors through straightforward visualizations. By leveraging data from the WHO, our application supports well-informed decision-making in the battle against TB, emphasizing the disease's progression and its association with risk factors such as HIV. Our objective is to equip stakeholders with precise data to aid strategic planning and intervention efforts.
-
-## Dashboard Functionality Overview
-
-Our dashboard provides an interactive visualization of WHO Tuberculosis (TB) data across global and country-specific levels. Here is an outline of its capabilities:
-- Geospatial Heatmap: A world map visualizes TB 'Incidence' or 'Mortality' rates by country for a selected year. The map allows for two modes of data representation—absolute numbers or rates relative to population size.
-- Data Selection: Users can refine the data displayed based on the year of interest and choose between displaying incidence or mortality data. This selection impacts both the heatmap and accompanying histogram.
-- Interactive Elements: Hovering over countries on the heatmap reveals specific data points through tooltips. By selecting a country, users are directed to a detailed analysis in a separate tab.
-    - Country-Specific Trends: Within this tab, the TB trends of the selected country are dissected through five distinct visualizations:
-    - Line Plots: Three line plots track 'TB Mortality and Incidence', 'TB Case Fatality Ratio', and 'TB-HIV Coinfection' rates over time.
-    -  Bar Chart: TB incidence rates are broken down by demographic groups. Users can choose multiple age groups at a time and one of the two categories for sex provided. (disclaimer: The sex information is restricted by WHO's categorizations).
-    -  Pie Chart: A pie chart presents the distribution of TB incidence by various risk factors, such as smoking and alcohol use, providing insights into potential areas for public health interventions.
-Each visualization has been designed with user interactivity in mind, offering the ability to customize the data displayed according to demographic and risk factor breakdowns.
 
 ## Usage for Users
 
