@@ -125,25 +125,29 @@ def update_geofigure(selected_year, selected_type, selected_value):
     else:
         y_column = "incidence_total"
 
+    highlight = alt.selection_point(on='mouseover', fields=["country"], name="highlighted_country")
+    click = alt.selection_point(fields=["country"], name="selected_country")
+    opacity = alt.condition(highlight, alt.value(1.0), alt.value(0.5))
+
     geo_chart = (
         alt.Chart(
             alt.topo_feature(world_url, "countries"), height=400, width="container"
         )
-        .mark_geoshape(stroke="#aaa", strokeWidth=0.25)
+        .mark_geoshape(stroke="#aaa", strokeWidth=0.25, cursor='pointer')
         .encode(
             color=alt.Color(
                 f"{y_column}:Q",
                 title=f"{'Incidence' if selected_value == 'incidence' else 'Mortality'} {'Absolute' if selected_type == 'absolute' else 'Relative'}",
             ),
             tooltip=["country:N", f"{y_column}:Q"],
+            opacity=opacity
         )
         .transform_lookup(
             lookup="id",
             from_=alt.LookupData(filtered_df, "iso_numeric", [
                                  y_column, "country"]),
         )
-        .add_params(alt.selection_point(fields=["country"], name="selected_country")
-                    )
+        .add_params(highlight, click)   
         .project(scale=180).properties(
             height=450,
             width="container"
