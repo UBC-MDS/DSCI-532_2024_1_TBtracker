@@ -6,7 +6,7 @@ from ..data import tb_data
 
 # Define the layout for the world_map page
 
-title = html.H1("Global Tuberculosis Trends", style={"textAlign": "left"})
+title = html.H1("Global Tuberculosis Trends", style={"textAlign": "left", "padding-top" : "2%"})
 
 deploy_time = os.getenv('DEPLOY_DATETIME')  # Set in render.com build step
 

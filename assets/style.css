@@ -6,12 +6,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
     color: purple;
 }
-.filter-label {
+.filter {
     font-weight: 'bold';
     padding-top: '10%';
-}
-.app-header {
-    height: 60px;
-    line-height: 60px;
-    border-bottom: thin lightgrey solid;
 }
