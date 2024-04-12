@@ -19,70 +19,67 @@ import plotly.express as px
      Input('radio-2', 'value'),]
 )
 
-
 def update_card(selected_year, selected_type, selected_value):
-    global_stat, diff_previous, diff_next = update_global_stats(selected_year, selected_type, selected_value)
+    (
+        global_stat,
+        diff_previous_text,
+        diff_next_text,
+        diff_previous_color,    
+        diff_next_color,
+    ) = update_global_stats(selected_year, selected_type, selected_value)
+    
     return [
-        html.P(f"Current Year Statistics: {global_stat}"),
-        html.P(f"Change from Previous Year: {diff_previous}%" if diff_previous is not None else ""),
-        html.P(f"Change to Next Year: {diff_next}%" if diff_next is not None else "")
+        html.P(global_stat, style={"fontSize": "48px", "fontWeight": "bold"}),
+        html.P(
+            f"YoN: {diff_previous_text}",
+            style={"fontSize": "24px", "color": diff_previous_color},
+        ),
+        html.P(
+            f"NoY: {diff_next_text}",
+            style={"fontSize": "24px", "color": diff_next_color},
+        ),
     ]
 
+    
 def update_global_stats(selected_year, selected_type, selected_value):
-
-    if selected_type == "absolute" and selected_value == "incidence":
-        y_column = "incidence_total"
-
-    elif selected_type == "relative" and selected_value == "incidence":
-        y_column = "incidence_rate"
-
-    elif selected_type == "absolute" and selected_value == "mortality":
-        y_column = "mortality_total"
-
-    elif selected_type == "relative" and selected_value == "mortality":
-        y_column = "mortality_rate"
-
-    else:
-        y_column = "incidence_total"
+    y_column_mapping = {
+        ("absolute", "incidence"): "incidence_total",
+        ("relative", "incidence"): "incidence_rate",
+        ("absolute", "mortality"): "mortality_total",
+        ("relative", "mortality"): "mortality_rate",
+    }
+    y_column = y_column_mapping.get((selected_type, selected_value), "incidence_total")
 
     tb_data["year_dt"] = pd.to_datetime(tb_data["year"], format='%Y')
-    year = pd.Timestamp(str(selected_year))
-    previous = year - pd.DateOffset(years=1)
-    next = year + pd.DateOffset(years=1)
+    selected_year_dt = pd.Timestamp(str(selected_year))
+    previous_year_dt = selected_year_dt - pd.DateOffset(years=1)
+    next_year_dt = selected_year_dt + pd.DateOffset(years=1)
 
-    global_stat = tb_data.loc[tb_data["year"] == selected_year][y_column].sum()
-    global_stat_previous = tb_data.loc[tb_data["year_dt"] == previous][y_column].sum()
-    global_stat_next = tb_data.loc[tb_data["year_dt"] == next][y_column].sum()
-    
-    if year != 2000:
-        diff_previous = round(((global_stat - global_stat_previous)/ global_stat_previous) * 100, 1)
+    global_stat = tb_data.loc[tb_data["year"] == selected_year, y_column].sum()
+    if selected_type != "absolute":
+        global_stat = f"{global_stat:.2f}"
     else:
-        diff_previous = None
+        global_stat = round(global_stat)
 
-    if year != 2022:
-        diff_next =  round(((global_stat - global_stat_next)/ global_stat_next) * 100, 1)
-    else:
-        diff_next = None 
+    diff_previous = diff_next = None  # Default values for differences
+    diff_previous_color = diff_next_color = 'black'  # Default text color
+
+    if selected_year > 2000:
+        global_stat_previous = tb_data.loc[tb_data["year_dt"] == previous_year_dt, y_column].sum()
+        if global_stat_previous:
+            diff_previous = round(((global_stat - global_stat_previous) / global_stat_previous) * 100, 1)
+            diff_previous_color = "blue" if diff_previous > 0 else "red"
     
-    # colours
-    diff_previous_color = "blue" if diff_previous and diff_previous > 0 else "red"
-    diff_next_color = "blue" if diff_next and diff_next > 0 else "red"
+    if selected_year < 2022:
+        global_stat_next = tb_data.loc[tb_data["year_dt"] == next_year_dt, y_column].sum()
+        if global_stat_next:
+            diff_next = round(((global_stat - global_stat_next) / global_stat_next) * 100, 1)
+            diff_next_color = "blue" if diff_next > 0 else "red"
 
-    # Use '+' symbol for positive change
-    diff_previous_text = f"+{diff_previous}%" if diff_previous and diff_previous > 0 else f"{diff_previous}%"
-    diff_next_text = f"+{diff_next}%" if diff_next and diff_next > 0 else f"{diff_next}%"
+    diff_previous_text = f"{diff_previous:+.1f}%" if diff_previous is not None else "data not available"
+    diff_next_text = f"{diff_next:+.1f}%" if diff_next is not None else "data not available"
 
-    # Create the card content with inline styling
-    card_content = [
-        html.P(global_stat, style={'fontSize': '48px', 'fontWeight': 'bold'}),
-        html.P(f"YoN: {diff_previous_text}", style={'fontSize': '24px', 'color': diff_previous_color}),
-        html.P(f"NoY: {diff_next_text}", style={'fontSize': '24px', 'color': diff_next_color})
-    ]
-    
-    return card_content
-
-
-    
+    return global_stat, diff_previous_text, diff_next_text, diff_previous_color, diff_next_color
 
 
 # This has to be done in a separate callback than below
