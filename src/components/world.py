@@ -8,7 +8,7 @@ from ..data import tb_data
 
 title = html.H1("Global Tuberculosis Trends", style={"textAlign": "center"})
 
-deploy_time = os.getenv('DEPLOY_DATETIME')  # Set in render.com build step
+deploy_time = os.getenv("DEPLOY_DATETIME")  # Set in render.com build step
 
 global_widgets_metric = dcc.RadioItems(
     id="radio-1",
@@ -30,41 +30,60 @@ global_widgets_var = dcc.RadioItems(
     labelStyle={"display": "block"},
 )
 
-geo_chart = dvc.Vega(id="geo_chart",
-                     spec={},
-                     signalsToObserve=["selected_country"],
-                     style={"width": "100%"})
-
-histogram = dvc.Vega(
-    id="tb_histogram",
-    opt={"renderer": "svg", "actions": False},
+geo_chart = dvc.Vega(
+    id="geo_chart",
     spec={},
-    style={"width": "100%"}
+    signalsToObserve=["selected_country"],
+    style={"width": "100%"},
 )
 
 dropdown_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
 
-global_tab = dcc.Tab(label="Global Data", value="tab-1",
-                     selected_style={'background-color': '#cee3eb'}, style={'background-color': '#dfebed'})
+global_tab = dcc.Tab(
+    label="Global Data",
+    value="tab-1",
+    selected_style={"background-color": "#cee3eb"},
+    style={"background-color": "#dfebed"},
+)
 
-country_tab = dcc.Tab(label="Country-Specific", value="tab-2",
-                      selected_style={'background-color': '#cee3eb'}, style={'background-color': '#dfebed'})
+country_tab = dcc.Tab(
+    label="Country-Specific",
+    value="tab-2",
+    selected_style={"background-color": "#cee3eb"},
+    style={"background-color": "#dfebed"},
+)
 
-total_tab = dcc.Tabs(id="global-tab", value="tab-1", children=[global_tab, country_tab],
-                     style={"padding": "10px"})
+total_tab = dcc.Tabs(
+    id="global-tab",
+    value="tab-1",
+    children=[global_tab, country_tab],
+    style={"padding": "10px"},
+)
 
 
-build_info = html.Div([
-    html.H4("ABOUT", style={'padding-top': '10%'}),
-    html.P("TBTracker uses data from WHO's global tuberculosis platform to visualize incidence and mortality rates across \
-                countries. Data was collected from the 2023 report, which includes data up to (but not including) 2023.", style={"font-size": "0.8em"}),
-    html.P("App was created by Sandra Gross, Sean McKay, Hina Bandukwala, and Yiwei Zhang",
-           style={"font-size": "0.8em"}),
-    html.A("Github Repo", href="https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker",
-           style={"font-size": "0.8em"}),
-    html.P(f"Last build was { deploy_time if deploy_time else '2024-04-06'}",
-           style={"font-size": "0.8em"})
-])
+build_info = html.Div(
+    [
+        html.H4("ABOUT", style={"padding-top": "10%"}),
+        html.P(
+            "TBTracker uses data from WHO's global tuberculosis platform to visualize incidence and mortality rates across \
+                countries. Data was collected from the 2023 report, which includes data up to (but not including) 2023.",
+            style={"font-size": "0.8em"},
+        ),
+        html.P(
+            "App was created by Sandra Gross, Sean McKay, Hina Bandukwala, and Yiwei Zhang",
+            style={"font-size": "0.8em"},
+        ),
+        html.A(
+            "Github Repo",
+            href="https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker",
+            style={"font-size": "0.8em"},
+        ),
+        html.P(
+            f"Last build was { deploy_time if deploy_time else '2024-04-06'}",
+            style={"font-size": "0.8em"},
+        ),
+    ]
+)
 
 
 world_component = dbc.Container(
@@ -74,35 +93,51 @@ world_component = dbc.Container(
             [
                 dbc.Col(
                     [
-                        html.H4("FILTERS", style={'padding-top': '10%'}),
-                        dbc.Label("Scale", style={
-                                  'font-weight': 'bold', 'padding-top': '10%'}),
+                        html.H4("FILTERS", style={"padding-top": "10%"}),
+                        dbc.Label(
+                            "Scale", style={"font-weight": "bold", "padding-top": "10%"}
+                        ),
                         global_widgets_metric,
                         html.Br(),
-                        dbc.Label("Metric", style={
-                                  'font-weight': 'bold', 'padding-top': '10%'}),
+                        dbc.Label(
+                            "Metric",
+                            style={"font-weight": "bold", "padding-top": "10%"},
+                        ),
                         global_widgets_var,
                         html.Br(),
-                        dbc.Label("Year", style={
-                                  'font-weight': 'bold', 'padding-top': '10%'}),
+                        dbc.Label(
+                            "Year", style={"font-weight": "bold", "padding-top": "10%"}
+                        ),
                         dropdown_year,
                         html.Br(),
                         html.Br(),
                         html.Br(),
                         html.Br(),
-                        build_info
-                    ], md=2, style={'background-color': '#dfebed'}
+                        build_info,
+                    ],
+                    md=2,
+                    style={"background-color": "#dfebed"},
                 ),
                 dbc.Col(
-                    [dbc.Row(dbc.Col(geo_chart)), dbc.Row(dbc.Col(histogram))], md=10
+                    [
+                        geo_chart,
+                        html.P(
+                            "* Hovering over the countries displays summary statistics, and clicking on them navigates to a second tab with more detailed country-specific information",
+                            style={
+                                "text-align": "right",
+                                "font-size": "14px",
+                                "font-weight": "bold",
+                            },
+                        ),
+                    ]
                 ),
             ]
-        )
-    ], fluid=True
+        ),
+    ],
+    fluid=True,
 )
 
 global_layout = dbc.Container(
-    [total_tab, dcc.Store(id="memory-output"),
-     dbc.Container(id="tb-page", fluid=True)],
-    fluid=True
+    [total_tab, dcc.Store(id="memory-output"), dbc.Container(id="tb-page", fluid=True)],
+    fluid=True,
 )
