@@ -54,12 +54,16 @@ total_tab = dbc.Tabs(id="global-tab", active_tab="tab-1", children=[global_tab, 
                      style={"padding": "10px"})
 
 
-build_info = html.Div([
-    html.H4("ABOUT", style={'padding-top': '10%'}),
+about_info = html.Div([
+    html.H4("ABOUT", style={'padding-top': '10%', 'text-align': 'center'}),
     html.P("TBTracker uses data from WHO's global tuberculosis platform to visualize incidence and mortality rates across \
                 countries. Data was collected from the 2023 report, which includes data up to (but not including) 2023.", style={"font-size": "0.8em"}),
     html.P("App was created by Sandra Gross, Sean McKay, Hina Bandukwala, and Yiwei Zhang",
            style={"font-size": "0.8em"}),
+])
+
+
+build_info = html.Div([
     html.A("Github Repo", href="https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker",
            style={"font-size": "0.8em"}),
     html.P(f"Last build was { deploy_time if deploy_time else '2024-04-06'}",
@@ -67,14 +71,41 @@ build_info = html.Div([
 ])
 
 
+learn_more_btn = dbc.Button("Learn More", color="primary", style={"font-size" : "0.8em"}, id="learn-more-open")
+
+learn_more_text = "We're students from the UBC Master of Data Science program, \
+    and we've developed The Global Tuberculosis Tracker as a resource for easy access to global TB trends. \
+    This tool is designed for NGOs, policymakers, and public health organizations to streamline the analysis of TB incidence, \
+    its trends, and associated risk factors through straightforward visualizations. \
+    By leveraging data from the WHO, our application supports well-informed decision-making in the battle against TB, \
+    emphasizing the disease's progression and its association with risk factors such as HIV. \
+    Our objective is to equip stakeholders with precise data to aid strategic planning and intervention efforts."
+
+learn_more_popup = dbc.Modal(
+            [
+                dbc.ModalHeader(dbc.ModalTitle("About the Project")),
+                dbc.ModalBody(learn_more_text),
+                dbc.ModalFooter(
+                    dbc.Button(
+                        "Close", id="learn-more-close", className="ms-auto", n_clicks=0
+                    )
+                ),
+            ],
+            id="modal",
+            is_open=False,
+        )
+
+
+
 world_component = dbc.Container(
     [
         dbc.Row(
             [
+                learn_more_popup,
                 dbc.Col(
                     [
                         title,
-                        html.Hr(style={'color': 'black'}),
+                        html.Hr(style={'color': 'black', }),
                         dbc.Label("Metric", className = "filter-label"),
                         global_widgets_var,
                         html.Br(),
@@ -85,8 +116,9 @@ world_component = dbc.Container(
                         dropdown_year,
                         html.Br(),
                         html.Br(),
-                        html.Br(),
-                        build_info
+                        about_info,
+                        build_info,
+                        dbc.Row([learn_more_btn], style={"padding-bottom" : "5%", 'padding-left' : '10%', 'padding-right' : '10%'}),
                     ], md=2, style={'background-color': '#CBC3E3'}
                 ),
                 dbc.Col(
