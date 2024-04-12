@@ -1,4 +1,4 @@
-from dash import Input, Output, callback, no_update
+from dash import Input, Output, callback, no_update, html
 from dash.exceptions import PreventUpdate
 from .components.country import country_component
 from .components.world import world_component
@@ -11,6 +11,79 @@ import altair as alt
 import plotly.express as px
 
 # All callbacks needed for the app
+
+@callback(
+    Output('stats-content', 'children'),
+    [Input('year', 'value'),
+     Input('radio-1', 'value'),
+     Input('radio-2', 'value'),]
+)
+
+
+def update_card(selected_year, selected_type, selected_value):
+    global_stat, diff_previous, diff_next = update_global_stats(selected_year, selected_type, selected_value)
+    return [
+        html.P(f"Current Year Statistics: {global_stat}"),
+        html.P(f"Change from Previous Year: {diff_previous}%" if diff_previous is not None else ""),
+        html.P(f"Change to Next Year: {diff_next}%" if diff_next is not None else "")
+    ]
+
+def update_global_stats(selected_year, selected_type, selected_value):
+
+    if selected_type == "absolute" and selected_value == "incidence":
+        y_column = "incidence_total"
+
+    elif selected_type == "relative" and selected_value == "incidence":
+        y_column = "incidence_rate"
+
+    elif selected_type == "absolute" and selected_value == "mortality":
+        y_column = "mortality_total"
+
+    elif selected_type == "relative" and selected_value == "mortality":
+        y_column = "mortality_rate"
+
+    else:
+        y_column = "incidence_total"
+
+    tb_data["year_dt"] = pd.to_datetime(tb_data["year"], format='%Y')
+    year = pd.Timestamp(str(selected_year))
+    previous = year - pd.DateOffset(years=1)
+    next = year + pd.DateOffset(years=1)
+
+    global_stat = tb_data.loc[tb_data["year"] == selected_year][y_column].sum()
+    global_stat_previous = tb_data.loc[tb_data["year_dt"] == previous][y_column].sum()
+    global_stat_next = tb_data.loc[tb_data["year_dt"] == next][y_column].sum()
+    
+    if year != 2000:
+        diff_previous = round(((global_stat - global_stat_previous)/ global_stat_previous) * 100, 1)
+    else:
+        diff_previous = None
+
+    if year != 2022:
+        diff_next =  round(((global_stat - global_stat_next)/ global_stat_next) * 100, 1)
+    else:
+        diff_next = None 
+    
+    # colours
+    diff_previous_color = "blue" if diff_previous and diff_previous > 0 else "red"
+    diff_next_color = "blue" if diff_next and diff_next > 0 else "red"
+
+    # Use '+' symbol for positive change
+    diff_previous_text = f"+{diff_previous}%" if diff_previous and diff_previous > 0 else f"{diff_previous}%"
+    diff_next_text = f"+{diff_next}%" if diff_next and diff_next > 0 else f"{diff_next}%"
+
+    # Create the card content with inline styling
+    card_content = [
+        html.P(global_stat, style={'fontSize': '48px', 'fontWeight': 'bold'}),
+        html.P(f"YoN: {diff_previous_text}", style={'fontSize': '24px', 'color': diff_previous_color}),
+        html.P(f"NoY: {diff_next_text}", style={'fontSize': '24px', 'color': diff_next_color})
+    ]
+    
+    return card_content
+
+
+    
+
 
 # This has to be done in a separate callback than below
 # Otherwise the rf-country-dropdown is not yet defined before we switch tabs

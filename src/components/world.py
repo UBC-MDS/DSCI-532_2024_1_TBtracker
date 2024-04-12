@@ -6,6 +6,16 @@ from ..data import tb_data
 
 # Define the layout for the world_map page
 
+# Cards
+card_global_stats = dbc.Card(
+    dbc.CardBody([
+        html.H4("Global Statistics", className="card-title", style={'textAlign': 'center'}),
+        html.Div(id="stats-content", style={'textAlign': 'center'})
+    ]),
+    color="light", 
+    style={"margin-top": "20px", "border": "1px solid black", "padding": "20px", "borderRadius": "5px"}
+)
+
 title = html.H1("Global Tuberculosis Trends", style={"textAlign": "center"})
 
 deploy_time = os.getenv('DEPLOY_DATETIME')  # Set in render.com build step
@@ -94,10 +104,15 @@ world_component = dbc.Container(
                     ], md=2, style={'background-color': '#dfebed'}
                 ),
                 dbc.Col(
-                    [dbc.Row(dbc.Col(geo_chart)), dbc.Row(dbc.Col(histogram))], md=10
+                    [
+                        dbc.Row(dbc.Col(geo_chart)), 
+                        dbc.Row(dbc.Col(histogram)),
+                        dbc.Row(dbc.Col(card_global_stats, width={"size": 3, "offset": 0},
+                style={"position": "absolute", "bottom": 0, "right": 0})),
+                    ], md=10
                 ),
             ]
-        )
+        ),
     ], fluid=True
 )
 
