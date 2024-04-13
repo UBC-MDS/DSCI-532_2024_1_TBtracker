@@ -6,6 +6,15 @@ from ..data import tb_data
 
 # Define the layout for the world_map page
 
+# Cards
+card_global_stats = dbc.Card(
+    dbc.CardBody([
+        html.Div(id="stats-content", style={'textAlign': 'center'})
+    ]),
+    color="light", 
+    style={"margin-top": "10%", "margin" : "5%", "border": "1px solid lightgray", "borderRadius": "20px"}
+)
+
 title_p1 = html.H1("Global", style={"textAlign": "left", "padding-top": "2%"})
 title_p2 = html.H1("TB Trends", style={"textAlign": "left"})
 
@@ -159,17 +168,17 @@ world_component = dbc.Container(
                 dbc.Col(
                     [
                         geo_chart,
-                        html.P(
-                            "* Hovering over the countries displays summary statistics, and clicking on them navigates to a second tab with more detailed country-specific information",
+                        dbc.Row([html.P(
+                            "* Hover to view summary; click to view details.",
                             style={"text-align": "center", "font-size": "14px"},
-                        ),
-                    ],
-                    md=10,
+                        )]),
+                        dbc.Row(dbc.Col(card_global_stats, width={"size": 3, "offset": 0},
+                        style={"position": "absolute", "bottom": 0, "right": 0, "padding-top" : "50%"})),
+                    ], md=10
                 ),
             ]
         ),
-    ],
-    fluid=True,
+    ], fluid=True
 )
 
 global_layout = dbc.Container(

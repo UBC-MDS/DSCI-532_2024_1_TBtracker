@@ -1,4 +1,4 @@
-from dash import Input, Output, State, callback, no_update
+from dash import Input, Output, State, callback, no_update, html
 from dash.exceptions import PreventUpdate
 from .components.country import country_component
 from .components.world import world_component
@@ -11,6 +11,81 @@ import altair as alt
 import plotly.express as px
 
 # All callbacks needed for the app
+
+@callback(
+    Output('stats-content', 'children'),
+    [Input('year', 'value'),
+     Input('radio-1', 'value'),
+     Input('radio-2', 'value'),]
+)
+
+def update_card(selected_year, selected_type, selected_value):
+    (
+        global_stat,
+        diff_previous_text,
+        diff_next_text,
+        diff_previous_color,    
+        diff_next_color,
+        global_stats_value
+    ) = update_global_stats(selected_year, selected_type, selected_value)
+    
+    return [
+        html.H5(global_stats_value, className="card-title", style={'textAlign': 'center'}),
+        html.P(global_stat, style={"fontSize": "35px", "fontWeight": "bold"}),
+        html.P(
+            f"YoN: {diff_previous_text}",
+            style={"fontSize": "15px", "color": diff_previous_color},
+        ),
+        html.P(
+            f"NoY: {diff_next_text}",
+            style={"fontSize": "15px", "color": diff_next_color},
+        ),
+    ]
+
+    
+def update_global_stats(selected_year, selected_type, selected_value):
+    y_column_mapping = {
+        ("absolute", "incidence"): "incidence_total",
+        ("relative", "incidence"): "incidence_rate",
+        ("absolute", "mortality"): "mortality_total",
+        ("relative", "mortality"): "mortality_rate",
+    }
+    y_column = y_column_mapping.get((selected_type, selected_value), "incidence_total")
+
+    tb_data["year_dt"] = pd.to_datetime(tb_data["year"], format='%Y')
+    selected_year_dt = pd.Timestamp(str(selected_year))
+    previous_year_dt = selected_year_dt - pd.DateOffset(years=1)
+    next_year_dt = selected_year_dt + pd.DateOffset(years=1)
+
+    global_stat = tb_data.loc[tb_data["year"] == selected_year, y_column].sum()
+    
+    diff_previous = diff_next = None  # Default values for differences
+    diff_previous_color = diff_next_color = 'black'  # Default text color
+
+    if selected_year != 2000:
+        global_stat_previous = tb_data.loc[tb_data["year_dt"] == previous_year_dt, y_column].sum()
+        if global_stat_previous:
+            diff_previous = round(((global_stat - global_stat_previous) / global_stat_previous) * 100, 1)
+            diff_previous_color = "blue" if diff_previous > 0 else "red"
+    
+    if selected_year != 2022:
+        global_stat_next = tb_data.loc[tb_data["year_dt"] == next_year_dt, y_column].sum()
+        if global_stat_next:
+            diff_next = round(((global_stat - global_stat_next) / global_stat_next) * 100, 1)
+            diff_next_color = "blue" if diff_next > 0 else "red"
+
+    diff_previous_text = f"{diff_previous:+.1f}%" if diff_previous is not None else "data not available"
+    diff_next_text = f"{diff_next:+.1f}%" if diff_next is not None else "data not available"
+
+    if selected_type != "absolute":
+        global_stat = f"{global_stat:.2f}"
+    else:
+        global_stat = round(global_stat)
+    
+
+
+    return global_stat, diff_previous_text, diff_next_text, diff_previous_color, diff_next_color, f"Global TB {selected_value.capitalize()}"
+
 
 # This has to be done in a separate callback than below
 # Otherwise the rf-country-dropdown is not yet defined before we switch tabs
@@ -88,7 +163,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
 
     geo_chart = (
         alt.Chart(
-            alt.topo_feature(world_url, "countries"), height=1000, width="container"
+            alt.topo_feature(world_url, "countries"), height=700, width="container"
         )
         .mark_geoshape(stroke="#aaa", strokeWidth=0.25, cursor="pointer")
         .encode(
