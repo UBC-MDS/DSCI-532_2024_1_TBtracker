@@ -84,11 +84,11 @@ def update_geofigure(selected_year, selected_type, selected_value):
         y_column = "incidence_total"
 
     click = alt.selection_point(fields=["country"], name="selected_country")
-    opacity = alt.condition(highlight, alt.value(1.0), alt.value(0.5))
+    opacity = alt.condition(highlight, alt.value(0.8), alt.value(0.5))
 
     geo_chart = (
         alt.Chart(
-            alt.topo_feature(world_url, "countries"), height=700, width="container"
+            alt.topo_feature(world_url, "countries"), height=1000, width="container"
         )
         .mark_geoshape(stroke="#aaa", strokeWidth=0.25, cursor="pointer")
         .encode(
@@ -97,9 +97,10 @@ def update_geofigure(selected_year, selected_type, selected_value):
                 title=f"{'Incidence' if selected_value == 'incidence' else 'Mortality'} {'Absolute' if selected_type == 'absolute' else 'Relative'}",
                 legend=alt.Legend(
                     orient="none",
-                    direction="horizontal",
+                    # direction="horizontal",
                     titleAnchor="middle",
                 ),
+                scale=alt.Scale(scheme="plasma"),
             ),
             tooltip=["country:N", f"{y_column}:Q"],
             opacity=opacity,
@@ -113,9 +114,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
         )
         .properties(height=800, width="container")
         .project(scale=250)
-        .configure_legend(
-            labelAlign="center",  # Center align the labels within the legend
-        )  # Increase padding at the top to make space for the legend
+        # Increase padding at the top to make space for the legend
     )
 
     return geo_chart.to_dict()
