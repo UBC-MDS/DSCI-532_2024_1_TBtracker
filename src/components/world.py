@@ -9,11 +9,10 @@ from ..data import tb_data
 # Cards
 card_global_stats = dbc.Card(
     dbc.CardBody([
-        html.H4("Global Statistics", className="card-title", style={'textAlign': 'center'}),
         html.Div(id="stats-content", style={'textAlign': 'center'})
     ]),
     color="light", 
-    style={"margin-top": "20px", "border": "1px solid black", "padding": "20px", "borderRadius": "5px"}
+    style={"margin": "10%", "border": "1px solid lightgray", "borderRadius": "20px"}
 )
 
 title_p1 = html.H1("Global", style={"textAlign": "left", "padding-top": "2%"})
@@ -170,7 +169,7 @@ world_component = dbc.Container(
                     [
                         geo_chart,
                         html.P(
-                            "* Hovering over the countries displays summary statistics, and clicking on them navigates to a second tab with more detailed country-specific information",
+                            "* Hover to view summary; click to view details.",
                             style={"text-align": "center", "font-size": "14px"},
                         ),
                         dbc.Row(dbc.Col(card_global_stats, width={"size": 3, "offset": 0},

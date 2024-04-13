@@ -26,9 +26,11 @@ def update_card(selected_year, selected_type, selected_value):
         diff_next_text,
         diff_previous_color,    
         diff_next_color,
+        global_stats_value
     ) = update_global_stats(selected_year, selected_type, selected_value)
     
     return [
+        html.H4(global_stats_value, className="card-title", style={'textAlign': 'center'}),
         html.P(global_stat, style={"fontSize": "48px", "fontWeight": "bold"}),
         html.P(
             f"YoN: {diff_previous_text}",
@@ -79,8 +81,10 @@ def update_global_stats(selected_year, selected_type, selected_value):
         global_stat = f"{global_stat:.2f}"
     else:
         global_stat = round(global_stat)
+    
 
-    return global_stat, diff_previous_text, diff_next_text, diff_previous_color, diff_next_color
+
+    return global_stat, diff_previous_text, diff_next_text, diff_previous_color, diff_next_color, f"Global Statistics: TB {selected_value.capitalize()}"
 
 
 # This has to be done in a separate callback than below
@@ -159,7 +163,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
 
     geo_chart = (
         alt.Chart(
-            alt.topo_feature(world_url, "countries"), height=400, width="container"
+            alt.topo_feature(world_url, "countries"), height=700, width="container"
         )
         .mark_geoshape(stroke="#aaa", strokeWidth=0.25, cursor="pointer")
         .encode(
@@ -182,8 +186,8 @@ def update_geofigure(selected_year, selected_type, selected_value):
             lookup="id",
             from_=alt.LookupData(filtered_df, "iso_numeric", [y_column, "country"]),
         )
-        .project(scale=200)
-        .properties(height=600, width="container")
+        .project(scale=250)
+        .properties(height=800, width="container")
         .configure_legend(
             labelAlign="center",  # Center align the labels within the legend
         )  # Increase padding at the top to make space for the legend
