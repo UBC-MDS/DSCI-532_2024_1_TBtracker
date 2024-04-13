@@ -88,7 +88,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
 
     geo_chart = (
         alt.Chart(
-            alt.topo_feature(world_url, "countries"), height=400, width="container"
+            alt.topo_feature(world_url, "countries"), height=700, width="container"
         )
         .mark_geoshape(stroke="#aaa", strokeWidth=0.25, cursor="pointer")
         .encode(
@@ -111,8 +111,8 @@ def update_geofigure(selected_year, selected_type, selected_value):
             lookup="id",
             from_=alt.LookupData(filtered_df, "iso_numeric", [y_column, "country"]),
         )
-        .project(scale=200)
-        .properties(height=600, width="container")
+        .properties(height=800, width="container")
+        .project(scale=250)
         .configure_legend(
             labelAlign="center",  # Center align the labels within the legend
         )  # Increase padding at the top to make space for the legend
