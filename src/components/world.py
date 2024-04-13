@@ -163,7 +163,8 @@ world_component = dbc.Container(
                             "* Hovering over the countries displays summary statistics, and clicking on them navigates to a second tab with more detailed country-specific information",
                             style={"text-align": "center", "font-size": "14px"},
                         ),
-                    ]
+                    ],
+                    md=10,
                 ),
             ]
         ),
