@@ -12,7 +12,7 @@ card_global_stats = dbc.Card(
         html.Div(id="stats-content", style={'textAlign': 'center'})
     ]),
     color="light", 
-    style={"margin": "10%", "border": "1px solid lightgray", "borderRadius": "20px"}
+    style={"margin-top": "10%", "margin" : "5%", "border": "1px solid lightgray", "borderRadius": "20px"}
 )
 
 title_p1 = html.H1("Global", style={"textAlign": "left", "padding-top": "2%"})
@@ -168,12 +168,12 @@ world_component = dbc.Container(
                 dbc.Col(
                     [
                         geo_chart,
-                        html.P(
+                        dbc.Row([html.P(
                             "* Hover to view summary; click to view details.",
                             style={"text-align": "center", "font-size": "14px"},
-                        ),
+                        )]),
                         dbc.Row(dbc.Col(card_global_stats, width={"size": 3, "offset": 0},
-                style={"position": "absolute", "bottom": 0, "right": 0})),
+                        style={"position": "absolute", "bottom": 0, "right": 0, "padding-top" : "50%"})),
                     ], md=10
                 ),
             ]

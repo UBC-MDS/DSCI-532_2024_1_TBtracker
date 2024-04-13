@@ -30,15 +30,15 @@ def update_card(selected_year, selected_type, selected_value):
     ) = update_global_stats(selected_year, selected_type, selected_value)
     
     return [
-        html.H4(global_stats_value, className="card-title", style={'textAlign': 'center'}),
-        html.P(global_stat, style={"fontSize": "48px", "fontWeight": "bold"}),
+        html.H5(global_stats_value, className="card-title", style={'textAlign': 'center'}),
+        html.P(global_stat, style={"fontSize": "35px", "fontWeight": "bold"}),
         html.P(
             f"YoN: {diff_previous_text}",
-            style={"fontSize": "24px", "color": diff_previous_color},
+            style={"fontSize": "15px", "color": diff_previous_color},
         ),
         html.P(
             f"NoY: {diff_next_text}",
-            style={"fontSize": "24px", "color": diff_next_color},
+            style={"fontSize": "15px", "color": diff_next_color},
         ),
     ]
 
@@ -84,7 +84,7 @@ def update_global_stats(selected_year, selected_type, selected_value):
     
 
 
-    return global_stat, diff_previous_text, diff_next_text, diff_previous_color, diff_next_color, f"Global Statistics: TB {selected_value.capitalize()}"
+    return global_stat, diff_previous_text, diff_next_text, diff_previous_color, diff_next_color, f"Global TB {selected_value.capitalize()}"
 
 
 # This has to be done in a separate callback than below
