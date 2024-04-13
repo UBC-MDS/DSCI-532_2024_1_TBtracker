@@ -1,4 +1,4 @@
-from dash import Input, Output, callback, no_update
+from dash import Input, Output, State, callback, no_update
 from dash.exceptions import PreventUpdate
 from .components.country import country_component
 from .components.world import world_component
@@ -23,7 +23,7 @@ def update_dropdown(data):
 
 # Returns a no_update if selected country is not none otherwise we enter a callback loop
 @callback(
-    Output("global-tab", "value"),
+    Output("global-tab", "active_tab"),
     Output("memory-output", "data"),
     Input("geo_chart", "signalData"),
     prevent_initial_call=True,
@@ -37,7 +37,7 @@ def render_content(data):
 
 @callback(
     Output("tb-page", "children"),
-    Input("global-tab", "value"),
+    Input("global-tab", "active_tab"),
 )
 def render_content(tab):
     if tab == "tab-1":
@@ -63,7 +63,8 @@ def render_content(tab):
     ],
 )
 def update_geofigure(selected_year, selected_type, selected_value):
-    hover = alt.selection_single(on="mouseover", fields=["country"], empty="none")
+    hover = alt.selection_point(on="mouseover", fields=["country"], empty=False)
+    highlight = alt.selection_point(on="mouseover", fields=["country"])
 
     filtered_df = tb_data[tb_data["year"] == selected_year]
 
@@ -82,11 +83,14 @@ def update_geofigure(selected_year, selected_type, selected_value):
     else:
         y_column = "incidence_total"
 
+    click = alt.selection_point(fields=["country"], name="selected_country")
+    opacity = alt.condition(highlight, alt.value(1.0), alt.value(0.5))
+
     geo_chart = (
         alt.Chart(
             alt.topo_feature(world_url, "countries"), height=400, width="container"
         )
-        .mark_geoshape(stroke="#aaa", strokeWidth=0.25)
+        .mark_geoshape(stroke="#aaa", strokeWidth=0.25, cursor="pointer")
         .encode(
             color=alt.Color(
                 f"{y_column}:Q",
@@ -98,15 +102,15 @@ def update_geofigure(selected_year, selected_type, selected_value):
                 ),
             ),
             tooltip=["country:N", f"{y_column}:Q"],
+            opacity=opacity,
             stroke=alt.condition(hover, alt.value("#03161C"), alt.value("#9BA4A7")),
             order=alt.condition(hover, alt.value(1), alt.value(0)),
         )
-        .add_params(hover)
+        .add_params(hover, click, highlight)
         .transform_lookup(
             lookup="id",
             from_=alt.LookupData(filtered_df, "iso_numeric", [y_column, "country"]),
         )
-        .add_params(alt.selection_point(fields=["country"], name="selected_country"))
         .project(scale=200)
         .properties(height=600, width="container")
         .configure_legend(
@@ -270,3 +274,14 @@ def update_title(selected_country):
         return "Global Tuberculosis Trends"
     else:
         return f"{selected_country}"
+
+
+@callback(
+    Output("modal", "is_open"),
+    [Input("learn-more-open", "n_clicks"), Input("learn-more-close", "n_clicks")],
+    [State("modal", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
