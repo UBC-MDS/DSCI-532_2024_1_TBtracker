@@ -172,10 +172,15 @@ world_component = dbc.Container(
                             "* Hover to view summary; click to view details.",
                             style={"text-align": "center", "font-size": "14px"},
                         )]),
-                        dbc.Row(dbc.Col(card_global_stats, width={"size": 3, "offset": 0},
-                                        style={"position": "absolute", "bottom": 0, "right": 0, "padding-top": "1%"})),
+                        dbc.Row(
+                            [
+                                dbc.Col(card_global_stats, width={"size": 3, "offset": 0},
+                                        style={"position": "absolute", "bottom": 180, "left": 0}),
+                            ],
+                            className="position-relative",
+                        )
                     ], md=10
-                ),
+                )
             ]
         ),
     ], fluid=True
