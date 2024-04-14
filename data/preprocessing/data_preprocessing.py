@@ -34,9 +34,6 @@ cols_no_na = [
     "e_inc_num",
     "e_inc_num_hi",
     "e_inc_num_lo",
-    "e_inc_tbhiv_num",
-    "e_inc_tbhiv_num_hi",
-    "e_inc_tbhiv_num_lo",
     "e_mort_exc_tbhiv_num",
     "e_mort_exc_tbhiv_num_hi",
     "e_mort_exc_tbhiv_num_lo",
@@ -70,7 +67,26 @@ tb_data_preprocess["tbhiv_coinfection_rate"] = (
     tb_data_preprocess["tbhiv_coinfection_total"] / tb_data_preprocess["e_pop_num"]
 )
 
-tb_data_preprocess = tb_data_preprocess.dropna(subset=cols_no_na)
+countries = tb_data_preprocess["country"].unique()
+years = range(tb_data_preprocess["year"].min(), tb_data_preprocess["year"].max() + 1)
+
+all_combinations = pd.MultiIndex.from_product(
+    [countries, years], names=["country", "year"]
+).to_frame(index=False)
+
+tb_data_preprocess = pd.merge(
+    all_combinations, tb_data_preprocess, on=["country", "year"], how="left"
+)
+
+
+# We need the iso_numeric columns for lookup in the geomap
+tb_data_preprocess["iso_numeric"] = tb_data_preprocess.groupby("country")[
+    "iso_numeric"
+].transform(lambda x: x.fillna(x.max()))
+
+# We can set others to a default value of -1
+tb_data_preprocess = tb_data_preprocess.fillna(-1)
+
 (tb_data_preprocess.to_csv("data/preprocessing/tb_data.csv", index=False))
 
 
