@@ -159,7 +159,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
         y_column = "incidence_total"
 
     click = alt.selection_point(fields=["country"], name="selected_country")
-    opacity = alt.condition(highlight, alt.value(1.0), alt.value(0.5))
+    opacity = alt.condition(highlight, alt.value(0.8), alt.value(0.5))
 
     geo_chart = (
         alt.Chart(
@@ -172,9 +172,10 @@ def update_geofigure(selected_year, selected_type, selected_value):
                 title=f"{'Incidence' if selected_value == 'incidence' else 'Mortality'} {'Absolute' if selected_type == 'absolute' else 'Relative'}",
                 legend=alt.Legend(
                     orient="none",
-                    direction="horizontal",
+                    # direction="horizontal",
                     titleAnchor="middle",
                 ),
+                scale=alt.Scale(scheme="plasma"),
             ),
             tooltip=["country:N", f"{y_column}:Q"],
             opacity=opacity,
@@ -186,11 +187,9 @@ def update_geofigure(selected_year, selected_type, selected_value):
             lookup="id",
             from_=alt.LookupData(filtered_df, "iso_numeric", [y_column, "country"]),
         )
-        .project(scale=250)
         .properties(height=800, width="container")
-        .configure_legend(
-            labelAlign="center",  # Center align the labels within the legend
-        )  # Increase padding at the top to make space for the legend
+        .project(scale=250)
+        # Increase padding at the top to make space for the legend
     )
 
     return geo_chart.to_dict()
