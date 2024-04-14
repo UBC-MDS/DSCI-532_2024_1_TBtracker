@@ -12,7 +12,7 @@
 
 ## Issues:
 - We encountered several layout challenges with the main page. The global map visualization, being a central feature, required enlargement, which was not straightforward. Fitting the new card on the page and adjusting the height of the column in the database object proved difficult. Ultimately, we had to position the card closer to the sidebar than originally intended, as adjusting the column width was more feasible than altering its height.
-- Issues with missing countries on the global map: some countries were in the original raw data but were filtered out due to processing. We had to include those back into the map. However, there were some countries that had no data at all.
+- Issues with missing countries on the global map: some countries were in the original raw data but were filtered out due to processing. We had to include those back into the map. However, there were some countries that had no data at all. To deal with those without leaving gaps in the map we imputed them by filling them with -1 and colouring those in gray
 
 ## Feedback:
 We have incorporated feedback from our peers and professor by:
