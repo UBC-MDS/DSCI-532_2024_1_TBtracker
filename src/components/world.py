@@ -75,8 +75,7 @@ about_info = html.Div(
     [
         html.H4("ABOUT", style={"padding-top": "10%", "text-align": "center"}),
         html.P(
-            "TBTracker uses data from WHO's global tuberculosis platform to visualize incidence and mortality rates across \
-                countries. Data was collected from the 2023 report, which includes data up to (but not including) 2023.",
+            "Welcome to TBTracker! This dashboard offers a comprehensive visualization of global Tuberculosis (TB) estimates from WHO.",
             style={"font-size": "0.8em"},
         ),
         html.P(
