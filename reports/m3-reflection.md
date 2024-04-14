@@ -20,8 +20,8 @@ We have incorporated feedback from our peers and professor by:
 - Eliminating scrolling on the main page to streamline the user experience.
 
 ## Challenge question:
-- We used group 18's idea of displaying dynamic statistics on a card along with associated increase/decrease compared to previous/next year. 
-- We changed the color scheme of our map after being inspired by the one group 2 used. We are using different plotting libraries so we chose the closest color scale that matches theirs. 
+- We incorporated group 18's approach of dynamically displaying statistics on a card along with associated increase/decrease compared to previous/next year. 
+- Inspired by Group 2, we revised the color scheme of our map to improve data visibility and contrast. Although we are using different plotting libraries, we selected the closest available color scale.
 
 
 
