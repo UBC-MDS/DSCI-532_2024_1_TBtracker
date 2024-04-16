@@ -34,7 +34,7 @@ tb_data_preprocess.fillna(-1, inplace=True)
 # Save to Parquet
 try:
     tb_data_preprocess.to_parquet("data/preprocessing/tb_data.parquet", index=False)
-    print("Data saved successfully to Parquet.")
+    print("TB Data saved successfully to Parquet.")
 except Exception as e:
     print("Failed to save data to Parquet:", e)
 
