@@ -31,9 +31,6 @@ tb_data_preprocess["tbhiv_coinfection_rate"] = tb_data_preprocess["tbhiv_coinfec
 tb_data_preprocess["iso_numeric"] = tb_data_preprocess.groupby("country")["iso_numeric"].transform(lambda x: x.fillna(x.max()))
 tb_data_preprocess.fillna(-1, inplace=True)
 
-# Debugging: check unique values for potential issues
-print("Unique ISO2 values:", tb_data_preprocess['iso2'].unique())
-
 # Save to Parquet
 try:
     tb_data_preprocess.to_parquet("data/preprocessing/tb_data.parquet", index=False)
