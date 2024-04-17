@@ -28,7 +28,7 @@ def create_line_plot(df, x_column, y_columns, title, legend_names):
     # Optionally remove the original column names from the hover data
     fig.update_traces(hovertemplate=None)
 
-    fig.show()
+    return fig
 
 
 def update_card_content(scale, variable):
