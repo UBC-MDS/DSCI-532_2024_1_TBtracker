@@ -14,9 +14,6 @@ tb_data_preprocess = tb_data[
     ]
 ].copy()
 
-# Convert columns to string to ensure correct data types
-for col in ['country', 'iso2', 'iso3']:
-    tb_data_preprocess[col] = tb_data_preprocess[col].astype(str)
 
 # Calculate additional metrics
 tb_data_preprocess["incidence_total"] = tb_data_preprocess["e_inc_num"] + tb_data_preprocess["e_inc_num_hi"]
@@ -27,9 +24,19 @@ tb_data_preprocess["cfr_total"] = tb_data_preprocess["cfr"]
 tb_data_preprocess["tbhiv_coinfection_total"] = tb_data_preprocess["e_inc_tbhiv_num"] + tb_data_preprocess["e_inc_tbhiv_num_hi"]
 tb_data_preprocess["tbhiv_coinfection_rate"] = tb_data_preprocess["tbhiv_coinfection_total"] / tb_data_preprocess["e_pop_num"]
 
+# Creating all combinations of countries and years
+countries = tb_data_preprocess["country"].unique()
+years = range(tb_data_preprocess["year"].min(), tb_data_preprocess["year"].max() + 1)
+all_combinations = pd.MultiIndex.from_product([countries, years], names=["country", "year"]).to_frame(index=False)
+tb_data_preprocess = pd.merge(all_combinations, tb_data_preprocess, on=["country", "year"], how="left")
+
 # Handling missing and filling values
 tb_data_preprocess["iso_numeric"] = tb_data_preprocess.groupby("country")["iso_numeric"].transform(lambda x: x.fillna(x.max()))
 tb_data_preprocess.fillna(-1, inplace=True)
+
+# Convert columns to string to ensure correct data types
+for col in ['country', 'iso2', 'iso3']:
+    tb_data_preprocess[col] = tb_data_preprocess[col].astype(str)
 
 # Save to Parquet
 try:
