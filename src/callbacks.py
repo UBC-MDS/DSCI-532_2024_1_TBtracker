@@ -9,9 +9,7 @@ from .data import tb_data, rf_data, preprocessed_rf_data
 import pandas as pd
 import altair as alt
 import plotly.express as px
-
-# All callbacks needed for the app
-
+from functools import lru_cache
 
 @callback(
     Output("stats-content", "children"),
@@ -47,6 +45,7 @@ def update_card(selected_year, selected_type, selected_value):
     ]
 
 
+@lru_cache
 def update_global_stats(selected_year, selected_type, selected_value):
     y_column_mapping = {
         ("absolute", "incidence"): "incidence_total",
@@ -313,13 +312,9 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
 
 @callback(
     Output("rf-pie-chart", "figure"),
-    [
-        Input("rf-country-dropdown", "value"),
-        Input("rf-sex-dropdown", "value"),
-        Input("rf-age-dropdown", "value"),
-    ],
+    Input("rf-country-dropdown", "value")
 )
-def update_pie_chart(country_value, sex_value, age_values):
+def update_pie_chart(country_value):
     # If no country is selected, do not update the chart
     if not country_value:
         raise PreventUpdate

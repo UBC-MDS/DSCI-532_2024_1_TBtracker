@@ -30,8 +30,8 @@ def create_line_plot(df, x_column, y_columns, title, legend_names):
 
     return fig
 
+
 def update_card_content(scale, variable):
-    print("Scale:", scale)
     # Logic to create content based on scale and variable
     if variable == "incidence":
         text = "Incidence"
