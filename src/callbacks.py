@@ -312,11 +312,7 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
 
 @callback(
     Output("rf-pie-chart", "figure"),
-    [
-        Input("rf-country-dropdown", "value"),
-        Input("rf-sex-dropdown", "value"),
-        Input("rf-age-dropdown", "value"),
-    ],
+    Input("rf-country-dropdown", "value")
 )
 def update_pie_chart(country_value):
     # If no country is selected, do not update the chart
