@@ -48,6 +48,7 @@ cols_no_na = [
 tb_data_preprocess["incidence_total"] = (
     tb_data_preprocess["e_inc_num"] + tb_data_preprocess["e_inc_num_hi"]
 )
+
 tb_data_preprocess["incidence_rate"] = (
     tb_data_preprocess["incidence_total"] / tb_data_preprocess["e_pop_num"]
 )
@@ -55,6 +56,7 @@ tb_data_preprocess["incidence_rate"] = (
 tb_data_preprocess["mortality_total"] = (
     tb_data_preprocess["e_mort_exc_tbhiv_num"] + tb_data_preprocess["e_mort_tbhiv_num"]
 )
+
 tb_data_preprocess["mortality_rate"] = (
     tb_data_preprocess["mortality_total"] / tb_data_preprocess["e_pop_num"]
 )
@@ -86,6 +88,18 @@ tb_data_preprocess["iso_numeric"] = tb_data_preprocess.groupby("country")[
 
 # We can set others to a default value of -1
 tb_data_preprocess = tb_data_preprocess.fillna(-1)
+
+tb_data_preprocess["incidence_total"] = tb_data_preprocess["incidence_total"].astype(
+    int
+)
+
+tb_data_preprocess["mortality_total"] = tb_data_preprocess["mortality_total"].astype(
+    int
+)
+
+tb_data_preprocess["incidence_rate"] = tb_data_preprocess["incidence_rate"].round(5)
+
+tb_data_preprocess["mortality_rate"] = tb_data_preprocess["mortality_rate"].round(5)
 
 (tb_data_preprocess.to_csv("data/preprocessing/tb_data.csv", index=False))
 
