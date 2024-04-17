@@ -8,11 +8,14 @@ from ..data import tb_data
 
 # Cards
 card_global_stats = dbc.Card(
-    dbc.CardBody([
-        html.Div(id="stats-content", style={'textAlign': 'center'})
-    ]),
-    color="light", 
-    style={"margin-top": "10%", "margin" : "5%", "border": "1px solid lightgray", "borderRadius": "20px"}
+    dbc.CardBody([html.Div(id="stats-content", style={"textAlign": "center"})]),
+    color="light",
+    style={
+        "margin-top": "10%",
+        "margin": "5%",
+        "border": "1px solid lightgray",
+        "borderRadius": "20px",
+    },
 )
 
 title_p1 = html.H1("Global", style={"textAlign": "left", "padding-top": "2%"})
@@ -20,14 +23,28 @@ title_p2 = html.H1("TB Trends", style={"textAlign": "left"})
 
 deploy_time = os.getenv("DEPLOY_DATETIME")  # Set in render.com build step
 
-global_widgets_metric = dcc.RadioItems(
-    id="radio-1",
-    options=[
-        {"label": "Absolute Numbers", "value": "absolute"},
-        {"label": "Relative Numbers", "value": "relative"},
-    ],
-    value="absolute",
-    labelStyle={"display": "block"},
+global_widgets_metric = html.Div(
+    [
+        dcc.RadioItems(
+            id="radio-1",
+            options=[
+                {"label": "Absolute Numbers", "value": "absolute"},
+                {"label": "Relative Numbers", "value": "relative"},
+            ],
+            value="absolute",
+            labelStyle={"display": "block"},
+        ),
+        # Add the explanation as a separate text element aligned with "Relative Numbers"
+        html.Div(
+            "(Proportional to pop size)",
+            style={
+                "marginLeft": "10px",  # Align with the radio item text
+                "fontSize": "smaller",  # Smaller font size for the subtext
+                "color": "#6c757d",  # A muted color for the subtext
+            },
+            id="relative-numbers-description",
+        ),
+    ]
 )
 
 global_widgets_var = dcc.RadioItems(
@@ -167,22 +184,35 @@ world_component = dbc.Container(
                 dbc.Col(
                     [
                         geo_chart,
-                        dbc.Row([html.P(
-                            "* Hover to view summary; click to view details.",
-                            style={"text-align": "center", "font-size": "14px"},
-                        )]),
                         dbc.Row(
                             [
-                                dbc.Col(card_global_stats, width={"size": 3, "offset": 0},
-                                        style={"position": "absolute", "bottom": 180, "left": 0}),
+                                html.P(
+                                    "* Hover to view summary; click to view details.",
+                                    style={"text-align": "center", "font-size": "14px"},
+                                )
+                            ]
+                        ),
+                        dbc.Row(
+                            [
+                                dbc.Col(
+                                    card_global_stats,
+                                    width={"size": 3, "offset": 0},
+                                    style={
+                                        "position": "absolute",
+                                        "bottom": 180,
+                                        "left": 0,
+                                    },
+                                ),
                             ],
                             className="position-relative",
-                        )
-                    ], md=10
-                )
+                        ),
+                    ],
+                    md=10,
+                ),
             ]
         ),
-    ], fluid=True
+    ],
+    fluid=True,
 )
 
 global_layout = dbc.Container(
