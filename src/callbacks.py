@@ -204,7 +204,8 @@ def update_geofigure(selected_year, selected_type, selected_value):
             tooltip=[
                 alt.Tooltip("country:N", title="Country"),
                 alt.Tooltip(
-                    f"{y_column}:Q", title=y_column.capitalize()
+                    f"{y_column}:Q",
+                    title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
                 ),  # Corrected dynamic variable reference and format
             ],
             opacity=alt.condition(highlight, alt.value(0.8), alt.value(0.5)),
