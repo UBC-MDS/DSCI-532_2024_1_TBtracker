@@ -10,6 +10,9 @@ def create_line_plot(df, x_column, y_columns, title, legend_names):
     for original_col, new_name in zip(y_columns, legend_names):
         plot_df[new_name] = plot_df[original_col]
 
+    config = {
+        "displayModeBar": False,
+    }
     # Create the figure using the new column names for y-values
     fig = px.line(plot_df, x=x_column, y=legend_names, title=title)
     fig.update_layout(
@@ -20,15 +23,16 @@ def create_line_plot(df, x_column, y_columns, title, legend_names):
             title_font=dict(size=10),
             font=dict(size=8),
             x=1,  # Horizontally align to the right
-            y=0   # Vertically align to the bottom
+            y=0,  # Vertically align to the bottom
         ),
-        plot_bgcolor="white"
+        plot_bgcolor="white",
     )
 
     # Optionally remove the original column names from the hover data
     fig.update_traces(hovertemplate=None)
 
-    return fig
+    fig.show(config=config)
+
 
 def update_card_content(scale, variable):
     print("Scale:", scale)
@@ -37,7 +41,7 @@ def update_card_content(scale, variable):
         text = "Incidence"
     else:
         text = "Mortality"
-    
+
     if scale == "absolute":
         text += " in Absolute Numbers"
     else:

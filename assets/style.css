@@ -10,3 +10,13 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 'bold';
     padding-top: '10%';
 }
+.modebar { display: none !important; }
+
+.vega-embed .vega-actions button,
+.vega-embed .vega-actions a {
+    display: none !important;
+}
+
+details {
+    display: none;
+}

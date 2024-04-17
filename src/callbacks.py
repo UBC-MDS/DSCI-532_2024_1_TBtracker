@@ -6,9 +6,12 @@ from .utils import world_url, create_line_plot
 
 from .data import tb_data, rf_data, preprocessed_rf_data
 
+
 import pandas as pd
 import altair as alt
 import plotly.express as px
+
+alt.renderers.set_embed_options(actions=False)
 
 # All callbacks needed for the app
 
