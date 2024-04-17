@@ -196,7 +196,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
                 alt.value("grey"),
                 alt.Color(
                     f"{y_column}:Q",
-                    title=f"{'Incidence' if selected_value == 'incidence' else 'Mortality'} {'Absolute' if selected_type == 'absolute' else 'Relative'}",
+                    title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
                     scale=alt.Scale(scheme="plasma"),
                     legend=alt.Legend(orient="none", titleAnchor="middle"),
                 ),
