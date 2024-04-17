@@ -89,14 +89,6 @@ tb_data_preprocess["iso_numeric"] = tb_data_preprocess.groupby("country")[
 # We can set others to a default value of -1
 tb_data_preprocess = tb_data_preprocess.fillna(-1)
 
-tb_data_preprocess["incidence_total"] = tb_data_preprocess["incidence_total"].astype(
-    int
-)
-
-tb_data_preprocess["mortality_total"] = tb_data_preprocess["mortality_total"].astype(
-    int
-)
-
 tb_data_preprocess["incidence_rate"] = tb_data_preprocess["incidence_rate"].round(5)
 
 tb_data_preprocess["mortality_rate"] = tb_data_preprocess["mortality_rate"].round(5)
