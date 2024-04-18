@@ -11,6 +11,7 @@ import altair as alt
 import plotly.express as px
 from functools import lru_cache
 
+
 @callback(
     Output("stats-content", "children"),
     [
@@ -243,13 +244,12 @@ def update_plots(selected_country):
         filtered_data,
         "year",
         ["e_mort_exc_tbhiv_num", "e_inc_num"],
-        "TB Mortality and Incidence",
         [legends["e_mort_exc_tbhiv_num"], legends["e_inc_num"]],
     )
 
     # Create the line plot for TB Case Fatality Ratio
     case_fatality_ratio_fig = create_line_plot(
-        filtered_data, "year", ["cfr"], "TB Case Fatality Ratio", [legends["cfr"]]
+        filtered_data, "year", ["cfr"], [legends["cfr"]]
     )
 
     # Create the line plot for TB-HIV coinfection incidence and mortality
@@ -257,7 +257,6 @@ def update_plots(selected_country):
         filtered_data,
         "year",
         ["e_mort_tbhiv_num", "e_inc_tbhiv_num"],
-        "TB-HIV Coinfection",
         [legends["e_mort_tbhiv_num"], legends["e_inc_tbhiv_num"]],
     )
 
@@ -294,6 +293,7 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
             "best": "TB Incidence (2022 Estimate from WHO)",
         },
         template="plotly_white",
+        color_discrete_sequence=px.colors.qualitative.Prism,
     )
 
     fig.update_layout(margin={"l": 40, "b": 40, "t": 10, "r": 0}, hovermode="closest")
@@ -310,10 +310,7 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
     return fig
 
 
-@callback(
-    Output("rf-pie-chart", "figure"),
-    Input("rf-country-dropdown", "value")
-)
+@callback(Output("rf-pie-chart", "figure"), Input("rf-country-dropdown", "value"))
 def update_pie_chart(country_value):
     # If no country is selected, do not update the chart
     if not country_value:
@@ -350,7 +347,12 @@ def update_pie_chart(country_value):
     )
 
     # Create the pie chart using the aggregated data
-    fig = px.pie(pie_data, names="Risk Factor", values="Count")
+    fig = px.pie(
+        pie_data,
+        names="Risk Factor",
+        values="Count",
+        color_discrete_sequence=px.colors.qualitative.Prism,
+    )
 
     # Customize the layout of the pie chart
     fig.update_traces(textinfo="percent+label")
