@@ -2,12 +2,24 @@ from dash import dcc, html
 import dash_bootstrap_components as dbc
 from ..data import rf_data
 
-# Function to create line plots
 country_dropdown = dcc.Dropdown(rf_data["country"].unique(), id="rf-country-dropdown")
-sex_dropdown = dcc.Dropdown(rf_data["sex"].unique(), id="rf-sex-dropdown")
+
+custom_labels = {"m": "Male", "f": "Female"}
+sex_options = [{'label': custom_labels.get(sex, f"Other ({sex})"), 
+                'value': sex} for sex in rf_data['sex'].unique()]
+sex_dropdown = dcc.Dropdown(
+    options=sex_options, 
+    id="rf-sex-dropdown",
+    placeholder="Select Sex:")
+
+age_options = [{'label': f"{age}", 'value': age} for age in rf_data['age_group'].unique()]
 age_dropdown = dcc.Dropdown(
-    rf_data["age_group"].unique(), id="rf-age-dropdown", multi=True
+    options=age_options, 
+    id="rf-age-dropdown", 
+    multi=True,
+    placeholder="Select Age Group(s):"
 )
+
 mortality_incidence_plot = dcc.Graph(
     id="tb_mortality_incidence_plot",
     style={"height": "35vh"},

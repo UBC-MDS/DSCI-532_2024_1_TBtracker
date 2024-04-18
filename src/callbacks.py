@@ -284,6 +284,16 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
         rff3 = rff2.copy()
     else:
         rff3 = rff2.loc[rff2["sex"] == xaxis_sex]
+    
+    order_age = ['0-4', '5-14', '15-24', 
+                 '25-34', '35-44', '45-54', 
+                 '55-64', '65plus']
+    
+    rff3['age_group'] = pd.Categorical(
+        rff3['age_group'], 
+        categories=order_age, ordered=True)
+
+    rff3 = rff3.sort_values('age_group')
 
     fig = px.bar(
         rff3,
@@ -292,7 +302,7 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
         color="sex",
         labels={
             "age_group": "Age Group",
-            "best": "TB Incidence (2022 Estimate from WHO)",
+            "best": "TB Incidence",
         },
         template="plotly_white",
         color_discrete_sequence=px.colors.qualitative.Bold,
