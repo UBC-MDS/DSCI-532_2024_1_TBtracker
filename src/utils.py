@@ -20,9 +20,9 @@ def create_line_plot(df, x_column, y_columns, title, legend_names):
             title_font=dict(size=10),
             font=dict(size=8),
             x=1,  # Horizontally align to the right
-            y=0   # Vertically align to the bottom
+            y=0,  # Vertically align to the bottom
         ),
-        plot_bgcolor="white"
+        plot_bgcolor="white",
     )
 
     # Optionally remove the original column names from the hover data
@@ -37,7 +37,7 @@ def update_card_content(scale, variable):
         text = "Incidence"
     else:
         text = "Mortality"
-    
+
     if scale == "absolute":
         text += " in Absolute Numbers"
     else:
