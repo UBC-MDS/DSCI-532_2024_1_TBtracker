@@ -33,7 +33,7 @@ tb_data_preprocess = tb_data[
 
 # Calculate additional metrics
 tb_data_preprocess["incidence_total"] = (
-    tb_data_preprocess["e_inc_num"] + tb_data_preprocess["e_inc_num_hi"]
+    tb_data_preprocess["e_inc_num"] + tb_data_preprocess["e_inc_tbhiv_num"]
 )
 tb_data_preprocess["incidence_rate"] = (
     tb_data_preprocess["incidence_total"] / tb_data_preprocess["e_pop_num"]
