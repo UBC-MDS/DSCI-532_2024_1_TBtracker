@@ -208,7 +208,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
                     title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
                 ),  # Corrected dynamic variable reference and format
             ],
-            opacity=alt.condition(highlight, alt.value(0.8), alt.value(0.5)),
+            opacity=opacity,
             stroke=alt.condition(hover, alt.value("#03161C"), alt.value("#9BA4A7")),
             order=alt.condition(hover, alt.value(1), alt.value(0)),
         )
