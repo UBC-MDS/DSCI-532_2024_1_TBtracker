@@ -15,7 +15,7 @@ def create_line_plot(df, x_column, y_columns, legend_names, title=""):
         plot_df,
         x=x_column,
         y=legend_names,
-        color_discrete_sequence=px.colors.qualitative.Prism,
+        color_discrete_sequence=px.colors.qualitative.Bold,
         title=title,
     )
     fig.update_layout(

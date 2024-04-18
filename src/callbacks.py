@@ -293,7 +293,7 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
             "best": "TB Incidence (2022 Estimate from WHO)",
         },
         template="plotly_white",
-        color_discrete_sequence=px.colors.qualitative.Prism,
+        color_discrete_sequence=px.colors.qualitative.Bold,
     )
 
     fig.update_layout(margin={"l": 40, "b": 40, "t": 10, "r": 0}, hovermode="closest")
@@ -351,7 +351,7 @@ def update_pie_chart(country_value):
         pie_data,
         names="Risk Factor",
         values="Count",
-        color_discrete_sequence=px.colors.qualitative.Prism,
+        color_discrete_sequence=px.colors.qualitative.Bold,
     )
 
     # Customize the layout of the pie chart
