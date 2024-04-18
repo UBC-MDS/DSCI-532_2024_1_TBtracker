@@ -12,6 +12,5 @@ dependencies:
     - pip
     - pip:
         - dash-vega-components
-        - fastparquet
         - pyarrow
     - vega_datasets
