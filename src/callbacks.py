@@ -6,6 +6,7 @@ from .utils import world_url, create_line_plot
 
 from .data import tb_data, rf_data, preprocessed_rf_data
 
+
 import pandas as pd
 import altair as alt
 import plotly.express as px
@@ -193,16 +194,18 @@ def update_geofigure(selected_year, selected_type, selected_value):
                 alt.value("grey"),
                 alt.Color(
                     f"{y_column}:Q",
-                    title=f"{'Incidence' if selected_value == 'incidence' else 'Mortality'} {'Absolute' if selected_type == 'absolute' else 'Relative'}",
-                    legend=alt.Legend(
-                        orient="none",
-                        # direction="horizontal",
-                        titleAnchor="middle",
-                    ),
+                    title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
                     scale=alt.Scale(scheme="plasma"),
+                    legend=alt.Legend(orient="none", titleAnchor="middle"),
                 ),
             ),
-            tooltip=["country:N", f"{y_column}:Q"],
+            tooltip=[
+                alt.Tooltip("country:N", title="Country"),
+                alt.Tooltip(
+                    f"{y_column}:Q",
+                    title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
+                ),  # Corrected dynamic variable reference and format
+            ],
             opacity=opacity,
             stroke=alt.condition(hover, alt.value("#03161C"), alt.value("#9BA4A7")),
             order=alt.condition(hover, alt.value(1), alt.value(0)),
@@ -214,7 +217,6 @@ def update_geofigure(selected_year, selected_type, selected_value):
         )
         .properties(height=800, width="container")
         .project(scale=250)
-        # Increase padding at the top to make space for the legend
     )
 
     return geo_chart.to_dict()

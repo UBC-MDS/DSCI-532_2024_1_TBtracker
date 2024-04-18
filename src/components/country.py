@@ -9,12 +9,26 @@ age_dropdown = dcc.Dropdown(
     rf_data["age_group"].unique(), id="rf-age-dropdown", multi=True
 )
 mortality_incidence_plot = dcc.Graph(
-    id="tb_mortality_incidence_plot", style={"height": "35vh"}
+    id="tb_mortality_incidence_plot",
+    style={"height": "35vh"},
+    config={
+        "displayModeBar": False,
+    },
 )
 case_fatality_ratio_plot = dcc.Graph(
-    id="tb_case_fatality_ratio_plot", style={"height": "35vh"}
+    id="tb_case_fatality_ratio_plot",
+    style={"height": "35vh"},
+    config={
+        "displayModeBar": False,
+    },
 )
-hiv_coinfection_plot = dcc.Graph(id="tb_hiv_coinfection_plot", style={"height": "35vh"})
+hiv_coinfection_plot = dcc.Graph(
+    id="tb_hiv_coinfection_plot",
+    style={"height": "35vh"},
+    config={
+        "displayModeBar": False,
+    },
+)
 risk_fac_graph = dcc.Graph(id="indicator-graphic", style={"height": "35vh"})
 risk_pie_chart = dcc.Graph(id="rf-pie-chart", style={"height": "35vh"})
 title = html.H2(id="page-title", style={"textAlign": "left", "padding-top": "1%"})
@@ -62,7 +76,12 @@ country_component = dbc.Container(
         ),
         dbc.Row(
             [
-                dbc.Col([mortality_incidence_plot], width=4),
+                dbc.Col(
+                    [
+                        mortality_incidence_plot,
+                    ],
+                    width=4,
+                ),
                 dbc.Col([case_fatality_ratio_plot], width=4),
                 dbc.Col([hiv_coinfection_plot], width=4),
             ]
