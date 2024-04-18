@@ -35,6 +35,10 @@ In this tab, you can filter for desired risk factors using the dropdown menu or 
 
 The application leverages two WHO datasets covering TB data for 217 countries from 2000 to 2022. Key data points include geographic information, annual TB incidence and mortality (with and without HIV), risk Factors such as age, sex, as well alcohol abuse, diabetes, HIV, smoking, and undernourishment for 2022.
 
+## Need support?
+
+If you want to report a problem or give an suggestion, we would love for you to open an issue at this github repository and we will get on to it in a timely manner.
+
 ## Usage for Developers
 
 ### Installation For Local Development
