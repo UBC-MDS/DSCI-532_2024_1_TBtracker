@@ -10,10 +10,7 @@ from .data import tb_data, rf_data, preprocessed_rf_data
 import pandas as pd
 import altair as alt
 import plotly.express as px
-
-alt.renderers.set_embed_options(actions=False)
-
-# All callbacks needed for the app
+from functools import lru_cache
 
 
 @callback(
@@ -50,6 +47,7 @@ def update_card(selected_year, selected_type, selected_value):
     ]
 
 
+@lru_cache
 def update_global_stats(selected_year, selected_type, selected_value):
     y_column_mapping = {
         ("absolute", "incidence"): "incidence_total",
@@ -208,7 +206,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
                     title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
                 ),  # Corrected dynamic variable reference and format
             ],
-            opacity=alt.condition(highlight, alt.value(0.8), alt.value(0.5)),
+            opacity=opacity,
             stroke=alt.condition(hover, alt.value("#03161C"), alt.value("#9BA4A7")),
             order=alt.condition(hover, alt.value(1), alt.value(0)),
         )
@@ -315,15 +313,8 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
     return fig
 
 
-@callback(
-    Output("rf-pie-chart", "figure"),
-    [
-        Input("rf-country-dropdown", "value"),
-        Input("rf-sex-dropdown", "value"),
-        Input("rf-age-dropdown", "value"),
-    ],
-)
-def update_pie_chart(country_value, sex_value, age_values):
+@callback(Output("rf-pie-chart", "figure"), Input("rf-country-dropdown", "value"))
+def update_pie_chart(country_value):
     # If no country is selected, do not update the chart
     if not country_value:
         raise PreventUpdate
