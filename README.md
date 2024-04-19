@@ -1,4 +1,4 @@
-# Tuberculosis Tracker <img src="img/Logo.png" align="right" width=175 height=175 alt="" />
+# Tuberculosis Tracker <img src="img/tbtracker_logo.png" align="right" width=175 height=175 alt="" />
 
 [![GitHub issues](https://img.shields.io/github/issues/UBC-MDS/DSCI-532_2024_1_TBtracker.svg)](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/issues)
 [![GitHub last commit](https://img.shields.io/github/last-commit/UBC-MDS/DSCI-532_2024_1_TBtracker.svg)](https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker/commits/main)
