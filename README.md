@@ -11,8 +11,7 @@ Visualize global and country-specific trends in tuberculosis incidence and morta
 For easy navigation, you can click on the links below to jump directly to a specific section or simply scroll through the page.
 
 - [About the Project](#about-the-project)
-- [Usage for users](#usage-for-users)
-- [Usage for Users](#usage-for-users)
+- [Usage](#general-usage)
 - [Data Sources and Structure](#data-sources-and-structure)
 - [Usage for Developers](#usage-for-developers)
 - [How to Contribute](#how-to-contribute)
@@ -24,12 +23,25 @@ For easy navigation, you can click on the links below to jump directly to a spec
 
 We're students from the UBC Master of Data Science program, and we've developed The Global Tuberculosis Tracker as a resource for easy access to global TB trends. This tool is designed for NGOs, policymakers, and public health organizations to streamline the analysis of TB incidence, its trends, and associated risk factors through straightforward visualizations. By leveraging data from the WHO, our application supports well-informed decision-making in the battle against TB, emphasizing the disease's progression and its association with risk factors such as HIV. Our objective is to equip stakeholders with precise data to aid strategic planning and intervention efforts.
 
-## Usage for Users
+## General Usage
 
 The live application can be visited [here!](https://dsci-532-2024-1-tbtracker.onrender.com/)
 
-The dashboard features a sidebar for user input and a main section for data display. In the sidebar, users can select the metric type (absolute or relative, which is proportional to the population size), the variable of interest ([incidence](https://www.health.ny.gov/diseases/chronic/basicstat.html) or [mortality](https://www.health.ny.gov/diseases/chronic/basicstat.html)), and the desired time range. The data display section includes an interactive global map where hovering over a country provides a brief statistical summary for that country and its global context. Clicking on a specific country directs users to a detailed tab, offering in-depth information about that country's risk factors and historical trends. Additionally, users can directly access this country-specific information through the "Country-Specific" tab in the top menu.
-In this tab, you can filter for desired risk factors using the dropdown menu or by clicking on elements within the pie chart's legend. For some countries, data is unavailable, and these will be colored in grey.
+### Global tab
+1. Widgets:
+- Metric Type: Select whether you want to view the data in absolute or relative terms. The relative metric is proportonal to the population size.
+- Variable of Interest: Choose between "incidence" or "mortality". Links to definitions of these terms can be found here for incidence and here for mortality.
+- Year: Pick the Year for which you want the data to be displayed.
+
+2. View Data on the Interactive Global Map:
+- Hover Over Countries: Move your cursor over any country on the map to see a brief relevant metrics for that country. 
+- Click on Countries: For a more detailed analysis, click on any country. This will direct you to the country-specific tab that provides in-depth information about that country’s risk factors and historical data trends. 
+Note: Grey-Colored Countries: Notice that some countries might be colored in grey on the map, indicating that data for these countries is unavailable.
+
+### Country tab
+- Directly access the country tab: Click on the "Country-Specific" tab in the dashboard’s top menu to view detailed information for a specific country. 
+- If you do not want to go back and forth between the main and country-specific tabs, we have provided functionality to directly select a country on the country-specifc tab.
+
 
 ## Data Sources and Structure
 
@@ -47,7 +59,7 @@ To run the **Global Tuberculosis Tracker** project locally on your machine, foll
 
 1. **Clone the Repository**
 
-    First, clone the repository using Git:
+    Open your terminal, go to the desired directory, and clone the repository by executing this Git command:
 
     ```bash
     git clone https://github.com/UBC-MDS/DSCI-532_2024_1_TBtracker.git
@@ -55,7 +67,7 @@ To run the **Global Tuberculosis Tracker** project locally on your machine, foll
 
 2. **Navigate to the Project Directory**
 
-    After cloning, change into the project directory:
+    Once you've cloned the repository, switch to the project directory by running the following command in your terminal:
 
     ```bash
     cd DSCI-532_2024_1_TBtracker
@@ -72,7 +84,7 @@ To run the **Global Tuberculosis Tracker** project locally on your machine, foll
 
 4. **Activate the Conda Environment**
 
-    Once the environment is created, activate it:
+    After creating the environment, activate it with the following command:
 
     ```bash
     conda activate TBtracker
@@ -80,7 +92,7 @@ To run the **Global Tuberculosis Tracker** project locally on your machine, foll
 
 5. **Run the Application**
 
-    With the `TBtracker` environment activated, you can now run the application:
+    With the `TBtracker` environment activated, you can now start the application:
 
     ```bash
     python app.py
