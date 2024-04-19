@@ -4,7 +4,7 @@ from .components.country import country_component
 from .components.world import world_component
 from .utils import world_url, create_line_plot
 
-from .data import tb_data, rf_data, preprocessed_rf_data
+from .data import tb_data, rf_data, preprocessed_rf_data, world_shp
 
 
 import pandas as pd
@@ -126,7 +126,8 @@ def update_dropdown(data):
     prevent_initial_call=True,
 )
 def render_content(data):
-    if data is not None and "selected_country" in data and data["selected_country"]:
+    if data is not None and "selected_country" in data and data["selected_country"] and "country" in data["selected_country"] \
+    and len(data["selected_country"]["country"]) > 0 :
         return ["tab-2", str(data["selected_country"]["country"][0])]
     else:
         return [no_update, "Canada"]
@@ -216,10 +217,16 @@ def update_geofigure(selected_year, selected_type, selected_value):
             from_=alt.LookupData(filtered_df, "iso_numeric", [y_column, "country"]),
         )
         .properties(height=800, width="container")
-        .project(scale=250)
+        .project(
+        'equalEarth',
+        scale=250
+        )
     )
 
-    return geo_chart.to_dict()
+    background_map = alt.Chart(world_shp).mark_geoshape(color="lightgrey").project(scale=250)
+
+
+    return ((background_map + geo_chart)).to_dict()
 
 
 @callback(

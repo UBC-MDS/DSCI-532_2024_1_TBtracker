@@ -11,6 +11,7 @@ dependencies:
     - plotly
     - pip
     - pip:
+        - geopandas
         - dash-vega-components
         - pyarrow
     - vega_datasets

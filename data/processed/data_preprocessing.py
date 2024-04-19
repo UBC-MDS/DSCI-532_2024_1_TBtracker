@@ -18,6 +18,9 @@ tb_data_preprocess = tb_data[
         "e_inc_tbhiv_num",
         "e_inc_tbhiv_num_hi",
         "e_inc_tbhiv_num_lo",
+        "e_mort_num",
+        "e_mort_num_hi",
+        "e_mort_num_lo",
         "e_mort_exc_tbhiv_num",
         "e_mort_exc_tbhiv_num_hi",
         "e_mort_exc_tbhiv_num_lo",
@@ -33,13 +36,13 @@ tb_data_preprocess = tb_data[
 
 # Calculate additional metrics
 tb_data_preprocess["incidence_total"] = (
-    tb_data_preprocess["e_inc_num"] + tb_data_preprocess["e_inc_tbhiv_num"]
+    tb_data_preprocess["e_inc_num"]
 )
 tb_data_preprocess["incidence_rate"] = (
     tb_data_preprocess["incidence_total"] / tb_data_preprocess["e_pop_num"]
 )
 tb_data_preprocess["mortality_total"] = (
-    tb_data_preprocess["e_mort_exc_tbhiv_num"] + tb_data_preprocess["e_mort_tbhiv_num"]
+    tb_data_preprocess["e_mort_num"]
 )
 tb_data_preprocess["mortality_rate"] = (
     tb_data_preprocess["mortality_total"] / tb_data_preprocess["e_pop_num"]
@@ -66,19 +69,10 @@ tb_data_preprocess = pd.merge(
 tb_data_preprocess["iso_numeric"] = tb_data_preprocess.groupby("country")[
     "iso_numeric"
 ].transform(lambda x: x.fillna(x.max()))
-tb_data_preprocess.fillna(-1, inplace=True)
 
 # Convert columns to string to ensure correct data types
 for col in ["country", "iso2", "iso3"]:
     tb_data_preprocess[col] = tb_data_preprocess[col].astype(str)
-
-tb_data_preprocess["incidence_total"] = tb_data_preprocess["incidence_total"].astype(
-    int
-)
-
-tb_data_preprocess["mortality_total"] = tb_data_preprocess["mortality_total"].astype(
-    int
-)
 
 tb_data_preprocess["incidence_rate"] = tb_data_preprocess["incidence_rate"].round(5)
 
