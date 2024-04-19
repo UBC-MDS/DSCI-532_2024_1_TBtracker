@@ -64,7 +64,7 @@ geo_chart = dvc.Vega(
     style={"width": "99%"},
 )
 
-dropdown_year = dcc.Dropdown(id="year", options=tb_data.year, value=2022)
+dropdown_year = dcc.Dropdown(id="year", options=tb_data.year.unique(), value=2022)
 
 global_tab = dbc.Tab(
     label="Global Data",
