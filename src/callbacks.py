@@ -205,9 +205,11 @@ def update_geofigure(selected_year, selected_type, selected_value):
             tooltip=[
                 alt.Tooltip("country:N", title="Country"),
                 alt.Tooltip(
-                    f"{y_column}:Q",
-                    title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
-                ),  # Corrected dynamic variable reference and format
+                    field=y_column,
+                    type="quantitative",
+                    title=f"{'Relative' if selected_type == 'relative' else 'Absolute'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
+                    format=".1%" if selected_type == "relative" else "",
+                )
             ],
             opacity=opacity,
             stroke=alt.condition(hover, alt.value("#03161C"), alt.value("#9BA4A7")),
