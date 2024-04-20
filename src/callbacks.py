@@ -96,7 +96,8 @@ def update_global_stats(selected_year, selected_type, selected_value):
                 diff_next_color = "blue" if diff_next > 0 else "red"
 
     if selected_type == "absolute":
-        global_stat = f"{global_stat:.0f}"
+        # ,.0f will include a comma as the thousands separator
+        global_stat = f"{global_stat:,.0f}"
         diff_previous_text = f"{diff_previous:+.1f}%" if diff_previous is not None else "data not available"
         diff_next_text = f"{diff_next:+.1f}%" if diff_next is not None else "data not available"
     else:
