@@ -22,6 +22,23 @@ from functools import lru_cache
     ],
 )
 def update_card(selected_year, selected_type, selected_value):
+    """
+    Update the stats card with global statistics based on the selected year, type, and value.
+
+    Parameters
+    ----------
+    selected_year : int
+        Year selected by the user.
+    selected_type : str
+        Type of statistics ('absolute' or 'relative').
+    selected_value : str
+        Value type to display ('incidence' or 'mortality').
+
+    Returns
+    -------
+    list
+        A list of Dash html components to render updated statistics.
+    """
     (
         global_stat,
         diff_previous_text,
@@ -49,6 +66,23 @@ def update_card(selected_year, selected_type, selected_value):
 
 @lru_cache
 def update_global_stats(selected_year, selected_type, selected_value):
+    """
+    Calculate global statistics for TB based on selected options.
+
+    Parameters
+    ----------
+    selected_year : int
+        Year selected by the user.
+    selected_type : str
+        Type of statistics ('absolute' or 'relative').
+    selected_value : str
+        Value type to display ('incidence' or 'mortality').
+
+    Returns
+    -------
+    tuple
+        Tuple containing calculated statistics and text/color styles.
+    """
     y_column_mapping = {
         ("absolute", "incidence"): "incidence_total",
         ("relative", "incidence"): "incidence_total",
@@ -146,6 +180,19 @@ def update_global_stats(selected_year, selected_type, selected_value):
 
 @callback(Output("rf-country-dropdown", "value"), Input("memory-output", "data"))
 def update_dropdown(data):
+    """
+    Update the dropdown for selecting a country based on data stored in memory.
+
+    Parameters
+    ----------
+    data : str
+        Data from memory storage which includes country name.
+
+    Returns
+    -------
+    str
+        The selected country's name.
+    """
     return data
 
 
@@ -157,6 +204,19 @@ def update_dropdown(data):
     prevent_initial_call=True,
 )
 def render_content(data):
+    """
+    Control the active tab and store data in memory based on selected geographical data.
+
+    Parameters
+    ----------
+    data : dict
+        Data emitted from a geographic chart, includes selected country details.
+
+    Returns
+    -------
+    tuple
+        Tuple containing the name of the active tab and the data to store.
+    """
     if (
         data is not None
         and "selected_country" in data
@@ -174,6 +234,19 @@ def render_content(data):
     Input("global-tab", "active_tab"),
 )
 def render_content(tab):
+    """
+    Render content based on the active tab.
+
+    Parameters
+    ----------
+    tab : str
+        Identifier of the active tab.
+
+    Returns
+    -------
+    function
+        Returns the appropriate component function based on the selected tab.
+    """
     if tab == "tab-1":
         return world_component
     elif tab == "tab-2":
@@ -197,6 +270,23 @@ def render_content(tab):
     ],
 )
 def update_geofigure(selected_year, selected_type, selected_value):
+    """
+    Update geographical visualization based on selected year, type, and value.
+
+    Parameters
+    ----------
+    selected_year : int
+        Selected year for data filtering.
+    selected_type : str
+        Type of data aggregation ('absolute' or 'relative').
+    selected_value : str
+        Value type to visualize ('incidence' or 'mortality').
+
+    Returns
+    -------
+    dict
+        A dictionary of Altair chart specifications for the geographical visualization.
+    """
     hover = alt.selection_point(on="mouseover", fields=["country"], empty=False)
     highlight = alt.selection_point(on="mouseover", fields=["country"])
 
@@ -272,6 +362,19 @@ def update_geofigure(selected_year, selected_type, selected_value):
     Input("rf-country-dropdown", "value"),
 )
 def update_plots(selected_country):
+    """
+    Update plots for TB mortality, incidence, case fatality ratio, and TB-HIV coinfection based on the selected country.
+
+    Parameters
+    ----------
+    selected_country : str
+        Country selected by the user.
+
+    Returns
+    -------
+    tuple
+        Three plotly figures for mortality/incidence, case fatality ratio, and TB-HIV coinfection.
+    """
     # Filter the data based on the selected country
     filtered_data = tb_data[tb_data["country"] == selected_country]
 
@@ -315,6 +418,23 @@ def update_plots(selected_country):
     Input("rf-age-dropdown", "value"),
 )
 def update_graph(country_value, xaxis_sex, xaxis_age):
+    """
+    Update bar chart visualizing TB incidence data filtered by country, sex, and age group.
+
+    Parameters
+    ----------
+    country_value : str
+        Selected country.
+    xaxis_sex : str
+        Sex category to filter data by.
+    xaxis_age : list[str]
+        Age group categories to filter data by.
+
+    Returns
+    -------
+    figure
+        A Plotly bar chart figure.
+    """
     rff = rf_data[rf_data["country"] == country_value]
     rff1 = rff.groupby(["age_group", "sex"], as_index=False)["best"].sum()
 
@@ -365,6 +485,19 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
 
 @callback(Output("rf-pie-chart", "figure"), Input("rf-country-dropdown", "value"))
 def update_pie_chart(country_value):
+    """
+    Update the pie chart visualizing TB risk factors for a selected country.
+
+    Parameters
+    ----------
+    country_value : str
+        Selected country for data filtering. If no country is selected, the chart is not updated.
+
+    Returns
+    -------
+    figure
+        A Plotly pie chart figure or raises PreventUpdate to halt the callback.
+    """
     # If no country is selected, do not update the chart
     if not country_value:
         raise PreventUpdate
@@ -419,6 +552,19 @@ def update_pie_chart(country_value):
     Input("rf-country-dropdown", "value"),
 )
 def update_title(selected_country):
+    """
+    Update the page title based on the selected country.
+
+    Parameters
+    ----------
+    selected_country : str
+        Country selected by the user.
+
+    Returns
+    -------
+    str
+        The updated page title reflecting the selected country or default title.
+    """
     if not selected_country:
         return "Global Tuberculosis Trends"
     else:
