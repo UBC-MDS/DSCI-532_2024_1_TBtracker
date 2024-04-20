@@ -4,6 +4,27 @@ world_url = "https://vega.github.io/vega-datasets/data/world-110m.json"
 
 
 def create_line_plot(df, x_column, y_columns, legend_names, title=""):
+    """
+    Create a line plot with custom legend names and an optional title.
+
+    Parameters
+    ----------
+    df : DataFrame
+        Pandas DataFrame containing the data to plot.
+    x_column : str
+        Name of the column in DataFrame to be used as the x-axis.
+    y_columns : list of str
+        List of column names in DataFrame that are to be plotted on the y-axis.
+    legend_names : list of str
+        List of names that will appear in the legend, corresponding to `y_columns`.
+    title : str, optional
+        Title of the plot. Default is an empty string.
+
+    Returns
+    -------
+    figure
+        A Plotly Express line plot object configured with the specified parameters.
+    """
     plot_df = df.copy()
 
     # Rename the columns for the legend
@@ -41,6 +62,22 @@ def create_line_plot(df, x_column, y_columns, legend_names, title=""):
 
 
 def update_card_content(scale, variable):
+    """
+    Create descriptive text for a card based on the scale and variable of interest.
+
+    Parameters
+    ----------
+    scale : str
+        The scale of data presentation, either 'absolute' or 'relative'.
+    variable : str
+        The variable of interest, either 'incidence' or 'mortality'.
+
+    Returns
+    -------
+    str
+        Descriptive text that combines the scale and variable information.
+    """
+
     # Logic to create content based on scale and variable
     if variable == "incidence":
         text = "Incidence"

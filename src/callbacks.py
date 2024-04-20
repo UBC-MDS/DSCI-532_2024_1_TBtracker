@@ -22,6 +22,23 @@ from functools import lru_cache
     ],
 )
 def update_card(selected_year, selected_type, selected_value):
+    """
+    Update the stats card with global statistics based on the selected year, type, and value.
+
+    Parameters
+    ----------
+    selected_year : int
+        Year selected by the user.
+    selected_type : str
+        Type of statistics ('absolute' or 'relative').
+    selected_value : str
+        Value type to display ('incidence' or 'mortality').
+
+    Returns
+    -------
+    list
+        A list of Dash html components to render updated statistics.
+    """
     (
         global_stat,
         diff_previous_text,
@@ -49,6 +66,23 @@ def update_card(selected_year, selected_type, selected_value):
 
 @lru_cache
 def update_global_stats(selected_year, selected_type, selected_value):
+    """
+    Calculate global statistics for TB based on selected options.
+
+    Parameters
+    ----------
+    selected_year : int
+        Year selected by the user.
+    selected_type : str
+        Type of statistics ('absolute' or 'relative').
+    selected_value : str
+        Value type to display ('incidence' or 'mortality').
+
+    Returns
+    -------
+    tuple
+        Tuple containing calculated statistics and text/color styles.
+    """
     y_column_mapping = {
         ("absolute", "incidence"): "incidence_total",
         ("relative", "incidence"): "incidence_total",
@@ -57,40 +91,54 @@ def update_global_stats(selected_year, selected_type, selected_value):
     }
     y_column = y_column_mapping.get((selected_type, selected_value), "incidence_total")
 
-    tb_data["year_dt"] = pd.to_datetime(tb_data["year"], format='%Y')
+    tb_data["year_dt"] = pd.to_datetime(tb_data["year"], format="%Y")
     selected_year_dt = pd.Timestamp(str(selected_year))
     previous_year_dt = selected_year_dt - pd.DateOffset(years=1)
     next_year_dt = selected_year_dt + pd.DateOffset(years=1)
 
     if selected_type == "relative":
-        global_stat = (tb_data.loc[tb_data["year"] == selected_year][y_column].sum() / tb_data.loc[tb_data["year"] == selected_year]["e_pop_num"].sum()) * 100 
+        global_stat = (
+            tb_data.loc[tb_data["year"] == selected_year][y_column].sum()
+            / tb_data.loc[tb_data["year"] == selected_year]["e_pop_num"].sum()
+        ) * 100
     else:
         global_stat = tb_data.loc[tb_data["year"] == selected_year, y_column].sum()
 
-
     diff_previous = diff_next = None  # Default values for differences
-    diff_previous_color = diff_next_color = 'black'  # Default text color
+    diff_previous_color = diff_next_color = "black"  # Default text color
 
     if selected_year != 2000:
         if selected_type == "absolute":
-            global_stat_previous = tb_data.loc[tb_data["year_dt"] == previous_year_dt, y_column].sum()
+            global_stat_previous = tb_data.loc[
+                tb_data["year_dt"] == previous_year_dt, y_column
+            ].sum()
             if global_stat_previous:
-                diff_previous = ((global_stat - global_stat_previous) / global_stat_previous) * 100
+                diff_previous = (
+                    (global_stat - global_stat_previous) / global_stat_previous
+                ) * 100
                 diff_previous_color = "blue" if diff_previous > 0 else "red"
         else:
-            global_stat_previous = (tb_data.loc[tb_data["year_dt"] == previous_year_dt, y_column].sum() / tb_data.loc[tb_data["year_dt"] == previous_year_dt, 'e_pop_num'].sum()) * 100
+            global_stat_previous = (
+                tb_data.loc[tb_data["year_dt"] == previous_year_dt, y_column].sum()
+                / tb_data.loc[tb_data["year_dt"] == previous_year_dt, "e_pop_num"].sum()
+            ) * 100
             if global_stat_previous:
                 diff_previous = global_stat - global_stat_previous
                 diff_previous_color = "blue" if diff_previous > 0 else "red"
-    
+
     if selected_year != 2022:
         if selected_type == "absolute":
-            global_stat_next = tb_data.loc[tb_data["year_dt"] == next_year_dt, y_column].sum()
+            global_stat_next = tb_data.loc[
+                tb_data["year_dt"] == next_year_dt, y_column
+            ].sum()
             if global_stat_next:
-                diff_next = ((global_stat - global_stat_next) / global_stat_next) * 100 
+                diff_next = ((global_stat - global_stat_next) / global_stat_next) * 100
                 diff_next_color = "blue" if diff_next > 0 else "red"
         else:
-            global_stat_next = (tb_data.loc[tb_data["year_dt"] == next_year_dt, y_column].sum() / tb_data.loc[tb_data["year_dt"] == next_year_dt, 'e_pop_num'].sum()) * 100
+            global_stat_next = (
+                tb_data.loc[tb_data["year_dt"] == next_year_dt, y_column].sum()
+                / tb_data.loc[tb_data["year_dt"] == next_year_dt, "e_pop_num"].sum()
+            ) * 100
             if global_stat_next:
                 diff_next = global_stat - global_stat_next
                 diff_next_color = "blue" if diff_next > 0 else "red"
@@ -98,12 +146,24 @@ def update_global_stats(selected_year, selected_type, selected_value):
     if selected_type == "absolute":
         # ,.0f will include a comma as the thousands separator
         global_stat = f"{global_stat:,.0f}"
-        diff_previous_text = f"{diff_previous:+.1f}%" if diff_previous is not None else "data not available"
-        diff_next_text = f"{diff_next:+.1f}%" if diff_next is not None else "data not available"
+        diff_previous_text = (
+            f"{diff_previous:+.1f}%"
+            if diff_previous is not None
+            else "data not available"
+        )
+        diff_next_text = (
+            f"{diff_next:+.1f}%" if diff_next is not None else "data not available"
+        )
     else:
         global_stat = f"{global_stat:.5f}%"
-        diff_previous_text = f"{diff_previous:+.5f}%" if diff_previous is not None else "data not available"
-        diff_next_text = f"{diff_next:+.5f}%" if diff_next is not None else "data not available"
+        diff_previous_text = (
+            f"{diff_previous:+.5f}%"
+            if diff_previous is not None
+            else "data not available"
+        )
+        diff_next_text = (
+            f"{diff_next:+.5f}%" if diff_next is not None else "data not available"
+        )
 
     return (
         global_stat,
@@ -121,6 +181,19 @@ def update_global_stats(selected_year, selected_type, selected_value):
 
 @callback(Output("rf-country-dropdown", "value"), Input("memory-output", "data"))
 def update_dropdown(data):
+    """
+    Update the dropdown for selecting a country based on data stored in memory.
+
+    Parameters
+    ----------
+    data : str
+        Data from memory storage which includes country name.
+
+    Returns
+    -------
+    str
+        The selected country's name.
+    """
     return data
 
 
@@ -132,8 +205,26 @@ def update_dropdown(data):
     prevent_initial_call=True,
 )
 def render_content(data):
-    if data is not None and "selected_country" in data and data["selected_country"] and "country" in data["selected_country"] \
-    and len(data["selected_country"]["country"]) > 0 :
+    """
+    Control the active tab and store data in memory based on selected geographical data.
+
+    Parameters
+    ----------
+    data : dict
+        Data emitted from a geographic chart, includes selected country details.
+
+    Returns
+    -------
+    tuple
+        Tuple containing the name of the active tab and the data to store.
+    """
+    if (
+        data is not None
+        and "selected_country" in data
+        and data["selected_country"]
+        and "country" in data["selected_country"]
+        and len(data["selected_country"]["country"]) > 0
+    ):
         return ["tab-2", str(data["selected_country"]["country"][0])]
     else:
         return [no_update, "Canada"]
@@ -144,6 +235,19 @@ def render_content(data):
     Input("global-tab", "active_tab"),
 )
 def render_content(tab):
+    """
+    Render content based on the active tab.
+
+    Parameters
+    ----------
+    tab : str
+        Identifier of the active tab.
+
+    Returns
+    -------
+    function
+        Returns the appropriate component function based on the selected tab.
+    """
     if tab == "tab-1":
         return world_component
     elif tab == "tab-2":
@@ -167,6 +271,23 @@ def render_content(tab):
     ],
 )
 def update_geofigure(selected_year, selected_type, selected_value):
+    """
+    Update geographical visualization based on selected year, type, and value.
+
+    Parameters
+    ----------
+    selected_year : int
+        Selected year for data filtering.
+    selected_type : str
+        Type of data aggregation ('absolute' or 'relative').
+    selected_value : str
+        Value type to visualize ('incidence' or 'mortality').
+
+    Returns
+    -------
+    dict
+        A dictionary of Altair chart specifications for the geographical visualization.
+    """
     hover = alt.selection_point(on="mouseover", fields=["country"], empty=False)
     highlight = alt.selection_point(on="mouseover", fields=["country"])
 
@@ -199,7 +320,10 @@ def update_geofigure(selected_year, selected_type, selected_value):
             color=alt.Color(
                 f"{y_column}:Q",
                 title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
-                scale=alt.Scale(scheme="plasma", type='log' if selected_type == 'absolute' else 'linear'),
+                scale=alt.Scale(
+                    scheme="plasma",
+                    type="log" if selected_type == "absolute" else "linear",
+                ),
                 legend=alt.Legend(orient="none", titleAnchor="middle"),
             ),
             tooltip=[
@@ -209,7 +333,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
                     type="quantitative",
                     title=f"{'Relative' if selected_type == 'relative' else 'Absolute'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
                     format=".1%" if selected_type == "relative" else "",
-                )
+                ),
             ],
             opacity=opacity,
             stroke=alt.condition(hover, alt.value("#03161C"), alt.value("#9BA4A7")),
@@ -221,14 +345,12 @@ def update_geofigure(selected_year, selected_type, selected_value):
             from_=alt.LookupData(filtered_df, "iso_numeric", [y_column, "country"]),
         )
         .properties(height=800, width="container")
-        .project(
-        'equalEarth',
-        scale=250
-        )
+        .project("equalEarth", scale=250)
     )
 
-    background_map = alt.Chart(world_shp).mark_geoshape(color="lightgrey").project(scale=250)
-
+    background_map = (
+        alt.Chart(world_shp).mark_geoshape(color="lightgrey").project(scale=250)
+    )
 
     return ((background_map + geo_chart)).to_dict()
 
@@ -240,6 +362,19 @@ def update_geofigure(selected_year, selected_type, selected_value):
     Input("rf-country-dropdown", "value"),
 )
 def update_plots(selected_country):
+    """
+    Update plots for TB mortality, incidence, case fatality ratio, and TB-HIV coinfection based on the selected country.
+
+    Parameters
+    ----------
+    selected_country : str
+        Country selected by the user.
+
+    Returns
+    -------
+    tuple
+        Three plotly figures for mortality/incidence, case fatality ratio, and TB-HIV coinfection.
+    """
     # Filter the data based on the selected country
     filtered_data = tb_data[tb_data["country"] == selected_country]
 
@@ -283,6 +418,23 @@ def update_plots(selected_country):
     Input("rf-age-dropdown", "value"),
 )
 def update_graph(country_value, xaxis_sex, xaxis_age):
+    """
+    Update bar chart visualizing TB incidence data filtered by country, sex, and age group.
+
+    Parameters
+    ----------
+    country_value : str
+        Selected country.
+    xaxis_sex : str
+        Sex category to filter data by.
+    xaxis_age : list[str]
+        Age group categories to filter data by.
+
+    Returns
+    -------
+    figure
+        A Plotly bar chart figure.
+    """
     rff = rf_data[rf_data["country"] == country_value]
     rff1 = rff.groupby(["age_group", "sex"], as_index=False)["best"].sum()
 
@@ -295,16 +447,14 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
         rff3 = rff2.copy()
     else:
         rff3 = rff2.loc[rff2["sex"] == xaxis_sex]
-    
-    order_age = ['0-4', '5-14', '15-24', 
-                 '25-34', '35-44', '45-54', 
-                 '55-64', '65plus']
-    
-    rff3['age_group'] = pd.Categorical(
-        rff3['age_group'], 
-        categories=order_age, ordered=True)
 
-    rff3 = rff3.sort_values('age_group')
+    order_age = ["0-4", "5-14", "15-24", "25-34", "35-44", "45-54", "55-64", "65plus"]
+
+    rff3["age_group"] = pd.Categorical(
+        rff3["age_group"], categories=order_age, ordered=True
+    )
+
+    rff3 = rff3.sort_values("age_group")
 
     fig = px.bar(
         rff3,
@@ -335,6 +485,19 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
 
 @callback(Output("rf-pie-chart", "figure"), Input("rf-country-dropdown", "value"))
 def update_pie_chart(country_value):
+    """
+    Update the pie chart visualizing TB risk factors for a selected country.
+
+    Parameters
+    ----------
+    country_value : str
+        Selected country for data filtering. If no country is selected, the chart is not updated.
+
+    Returns
+    -------
+    figure
+        A Plotly pie chart figure or raises PreventUpdate to halt the callback.
+    """
     # If no country is selected, do not update the chart
     if not country_value:
         raise PreventUpdate
@@ -389,6 +552,19 @@ def update_pie_chart(country_value):
     Input("rf-country-dropdown", "value"),
 )
 def update_title(selected_country):
+    """
+    Update the page title based on the selected country.
+
+    Parameters
+    ----------
+    selected_country : str
+        Country selected by the user.
+
+    Returns
+    -------
+    str
+        The updated page title reflecting the selected country or default title.
+    """
     if not selected_country:
         return "Global Tuberculosis Trends"
     else:
