@@ -196,15 +196,11 @@ def update_geofigure(selected_year, selected_type, selected_value):
         )
         .mark_geoshape(stroke="#aaa", strokeWidth=0.25, cursor="pointer")
         .encode(
-            color=alt.condition(
-                alt.FieldEqualPredicate(field=y_column, equal=-1),
-                alt.value("grey"),
-                alt.Color(
-                    f"{y_column}:Q",
-                    title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
-                    scale=alt.Scale(scheme="plasma"),
-                    legend=alt.Legend(orient="none", titleAnchor="middle"),
-                ),
+            color=alt.Color(
+                f"{y_column}:Q",
+                title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
+                scale=alt.Scale(scheme="plasma", type='log' if selected_type == 'absolute' else 'linear'),
+                legend=alt.Legend(orient="none", titleAnchor="middle"),
             ),
             tooltip=[
                 alt.Tooltip("country:N", title="Country"),
