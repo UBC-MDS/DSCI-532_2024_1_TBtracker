@@ -57,78 +57,52 @@ def update_global_stats(selected_year, selected_type, selected_value):
     }
     y_column = y_column_mapping.get((selected_type, selected_value), "incidence_total")
 
-    tb_data["year_dt"] = pd.to_datetime(tb_data["year"], format="%Y")
+    tb_data["year_dt"] = pd.to_datetime(tb_data["year"], format='%Y')
     selected_year_dt = pd.Timestamp(str(selected_year))
     previous_year_dt = selected_year_dt - pd.DateOffset(years=1)
     next_year_dt = selected_year_dt + pd.DateOffset(years=1)
 
     if selected_type == "relative":
-        global_stat = (
-            tb_data.loc[tb_data["year"] == selected_year][y_column].sum()
-            / tb_data.loc[tb_data["year"] == selected_year]["e_pop_num"].sum()
-        ) * 100
+        global_stat = (tb_data.loc[tb_data["year"] == selected_year][y_column].sum() / tb_data.loc[tb_data["year"] == selected_year]["e_pop_num"].sum()) * 100 
     else:
         global_stat = tb_data.loc[tb_data["year"] == selected_year, y_column].sum()
 
+
     diff_previous = diff_next = None  # Default values for differences
-    diff_previous_color = diff_next_color = "black"  # Default text color
+    diff_previous_color = diff_next_color = 'black'  # Default text color
 
     if selected_year != 2000:
         if selected_type == "absolute":
-            global_stat_previous = tb_data.loc[
-                tb_data["year_dt"] == previous_year_dt, y_column
-            ].sum()
+            global_stat_previous = tb_data.loc[tb_data["year_dt"] == previous_year_dt, y_column].sum()
             if global_stat_previous:
-                diff_previous = (
-                    (global_stat - global_stat_previous) / global_stat_previous
-                ) * 100
+                diff_previous = ((global_stat - global_stat_previous) / global_stat_previous) * 100
                 diff_previous_color = "blue" if diff_previous > 0 else "red"
         else:
-            global_stat_previous = (
-                tb_data.loc[tb_data["year_dt"] == previous_year_dt, y_column].sum()
-                / tb_data.loc[tb_data["year_dt"] == previous_year_dt, "e_pop_num"].sum()
-            ) * 100
+            global_stat_previous = (tb_data.loc[tb_data["year_dt"] == previous_year_dt, y_column].sum() / tb_data.loc[tb_data["year_dt"] == previous_year_dt, 'e_pop_num'].sum()) * 100
             if global_stat_previous:
                 diff_previous = global_stat - global_stat_previous
                 diff_previous_color = "blue" if diff_previous > 0 else "red"
-
+    
     if selected_year != 2022:
         if selected_type == "absolute":
-            global_stat_next = tb_data.loc[
-                tb_data["year_dt"] == next_year_dt, y_column
-            ].sum()
+            global_stat_next = tb_data.loc[tb_data["year_dt"] == next_year_dt, y_column].sum()
             if global_stat_next:
-                diff_next = ((global_stat - global_stat_next) / global_stat_next) * 100
+                diff_next = ((global_stat - global_stat_next) / global_stat_next) * 100 
                 diff_next_color = "blue" if diff_next > 0 else "red"
         else:
-            global_stat_next = (
-                tb_data.loc[tb_data["year_dt"] == next_year_dt, y_column].sum()
-                / tb_data.loc[tb_data["year_dt"] == next_year_dt, "e_pop_num"].sum()
-            ) * 100
+            global_stat_next = (tb_data.loc[tb_data["year_dt"] == next_year_dt, y_column].sum() / tb_data.loc[tb_data["year_dt"] == next_year_dt, 'e_pop_num'].sum()) * 100
             if global_stat_next:
                 diff_next = global_stat - global_stat_next
                 diff_next_color = "blue" if diff_next > 0 else "red"
 
     if selected_type == "absolute":
         global_stat = f"{global_stat:.0f}"
-        diff_previous_text = (
-            f"{diff_previous:+.1f}%"
-            if diff_previous is not None
-            else "data not available"
-        )
-        diff_next_text = (
-            f"{diff_next:+.1f}%" if diff_next is not None else "data not available"
-        )
+        diff_previous_text = f"{diff_previous:+.1f}%" if diff_previous is not None else "data not available"
+        diff_next_text = f"{diff_next:+.1f}%" if diff_next is not None else "data not available"
     else:
         global_stat = f"{global_stat:.5f}%"
-        diff_previous_text = (
-            f"{diff_previous:+.5f}%"
-            if diff_previous is not None
-            else "data not available"
-        )
-        diff_next_text = (
-            f"{diff_next:+.5f}%" if diff_next is not None else "data not available"
-        )
+        diff_previous_text = f"{diff_previous:+.5f}%" if diff_previous is not None else "data not available"
+        diff_next_text = f"{diff_next:+.5f}%" if diff_next is not None else "data not available"
 
     return (
         global_stat,
@@ -157,13 +131,8 @@ def update_dropdown(data):
     prevent_initial_call=True,
 )
 def render_content(data):
-    if (
-        data is not None
-        and "selected_country" in data
-        and data["selected_country"]
-        and "country" in data["selected_country"]
-        and len(data["selected_country"]["country"]) > 0
-    ):
+    if data is not None and "selected_country" in data and data["selected_country"] and "country" in data["selected_country"] \
+    and len(data["selected_country"]["country"]) > 0 :
         return ["tab-2", str(data["selected_country"]["country"][0])]
     else:
         return [no_update, "Canada"]
@@ -243,7 +212,7 @@ def update_geofigure(selected_year, selected_type, selected_value):
                     type="quantitative",
                     title=f"{'Relative' if selected_type == 'relative' else 'Absolute'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
                     format=".1%" if selected_type == "relative" else "",
-                ),
+                )
             ],
             opacity=opacity,
             stroke=alt.condition(hover, alt.value("#03161C"), alt.value("#9BA4A7")),
@@ -255,12 +224,14 @@ def update_geofigure(selected_year, selected_type, selected_value):
             from_=alt.LookupData(filtered_df, "iso_numeric", [y_column, "country"]),
         )
         .properties(height=800, width="container")
-        .project("equalEarth", scale=250)
+        .project(
+        'equalEarth',
+        scale=250
+        )
     )
 
-    background_map = (
-        alt.Chart(world_shp).mark_geoshape(color="lightgrey").project(scale=250)
-    )
+    background_map = alt.Chart(world_shp).mark_geoshape(color="lightgrey").project(scale=250)
+
 
     return ((background_map + geo_chart)).to_dict()
 
@@ -327,14 +298,16 @@ def update_graph(country_value, xaxis_sex, xaxis_age):
         rff3 = rff2.copy()
     else:
         rff3 = rff2.loc[rff2["sex"] == xaxis_sex]
+    
+    order_age = ['0-4', '5-14', '15-24', 
+                 '25-34', '35-44', '45-54', 
+                 '55-64', '65plus']
+    
+    rff3['age_group'] = pd.Categorical(
+        rff3['age_group'], 
+        categories=order_age, ordered=True)
 
-    order_age = ["0-4", "5-14", "15-24", "25-34", "35-44", "45-54", "55-64", "65plus"]
-
-    rff3["age_group"] = pd.Categorical(
-        rff3["age_group"], categories=order_age, ordered=True
-    )
-
-    rff3 = rff3.sort_values("age_group")
+    rff3 = rff3.sort_values('age_group')
 
     fig = px.bar(
         rff3,
