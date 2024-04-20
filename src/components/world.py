@@ -199,7 +199,7 @@ world_component = dbc.Container(
                                     width={"size": 3, "offset": 0},
                                     style={
                                         "position": "absolute",
-                                        "bottom": 60,
+                                        "bottom": 180,
                                         "left": 0,
                                     },
                                 ),
