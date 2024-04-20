@@ -96,7 +96,8 @@ def update_global_stats(selected_year, selected_type, selected_value):
                 diff_next_color = "blue" if diff_next > 0 else "red"
 
     if selected_type == "absolute":
-        global_stat = f"{global_stat:.0f}"
+        # ,.0f will include a comma as the thousands separator
+        global_stat = f"{global_stat:,.0f}"
         diff_previous_text = f"{diff_previous:+.1f}%" if diff_previous is not None else "data not available"
         diff_next_text = f"{diff_next:+.1f}%" if diff_next is not None else "data not available"
     else:
@@ -195,15 +196,11 @@ def update_geofigure(selected_year, selected_type, selected_value):
         )
         .mark_geoshape(stroke="#aaa", strokeWidth=0.25, cursor="pointer")
         .encode(
-            color=alt.condition(
-                alt.FieldEqualPredicate(field=y_column, equal=-1),
-                alt.value("grey"),
-                alt.Color(
-                    f"{y_column}:Q",
-                    title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
-                    scale=alt.Scale(scheme="plasma"),
-                    legend=alt.Legend(orient="none", titleAnchor="middle"),
-                ),
+            color=alt.Color(
+                f"{y_column}:Q",
+                title=f"{'Absolute' if selected_type == 'absolute' else 'Relative'} {'Incidence' if selected_value == 'incidence' else 'Mortality'}",
+                scale=alt.Scale(scheme="plasma", type='log' if selected_type == 'absolute' else 'linear'),
+                legend=alt.Legend(orient="none", titleAnchor="middle"),
             ),
             tooltip=[
                 alt.Tooltip("country:N", title="Country"),
