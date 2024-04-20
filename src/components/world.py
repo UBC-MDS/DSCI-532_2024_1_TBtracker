@@ -90,7 +90,7 @@ total_tab = dbc.Tabs(
 
 about_info = html.Div(
     [
-        html.H4("ABOUT", style={"padding-top": "10%", "text-align": "center"}),
+        html.H4("ABOUT", style={"padding-top": "1%", "text-align": "center"}),
         html.P(
             "Welcome to TBTracker! This dashboard offers a comprehensive visualization of global Tuberculosis (TB) estimates from WHO.",
             style={"font-size": "0.8em"},
@@ -168,7 +168,6 @@ world_component = dbc.Container(
                         html.Br(),
                         html.Br(),
                         about_info,
-                        build_info,
                         dbc.Row(
                             [learn_more_btn],
                             style={
@@ -177,6 +176,7 @@ world_component = dbc.Container(
                                 "padding-right": "10%",
                             },
                         ),
+                        build_info
                     ],
                     md=2,
                     style={"background-color": "#CBC3E3"},
@@ -199,7 +199,7 @@ world_component = dbc.Container(
                                     width={"size": 3, "offset": 0},
                                     style={
                                         "position": "absolute",
-                                        "bottom": 180,
+                                        "bottom": 60,
                                         "left": 0,
                                     },
                                 ),
