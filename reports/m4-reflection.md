@@ -5,18 +5,18 @@
 Throughout the development of the TB Tracker Dashboard, our team implemented several optimizations and refinements to enhance performance, functionality, and user experience:
 
 ### Performance Optimizations
-- Switched data loading to a binary format (`parquet`) for faster processing.
-- Created a processed data file loaded directly into the app, minimizing redundant data manipulation.
-- Used `lru_cache` to cache key functions, significantly reducing reload times.
+
+
+We've made several optimizations to enhance data processing efficiency in our application. Firstly, we switched our data loading mechanism to a **binary format (parquet)**, which allows for faster processing. Additionally, we created a **processed data file** that is loaded directly into the app, effectively minimizing redundant data manipulation tasks. To further improve performance, we utilized the **lru_cache decorator** to cache key functions, which has significantly reduced reload times. 
 
 ### User Interface and Usability Enhancements
-- Introduced a new logo and updated the app title to "TB Tracker" to strengthen our visual identity.
-- Refined the metric calculation for relative metrics to be more accurate and informative.
-- Improved the readability and functionality of country-specific charts by using clearer labeling and adding descriptive selection tabs.
-- Enhanced global visuals by adjusting color scales and adding detailed tooltips and interactive elements.
+
+
+We've made several updates to enhance the visual and functional aspects of our app, including a **new logo** and the **new title** "TB Tracker". To improve the accuracy and informativeness of our analytics, we **refined the metric calculations** for relative metrics. 
+Additionally, we enhanced the readability and functionality of country-specific charts by implementing **clearer labeling** and adding **descriptive selection tabs**. Further improvements were made to the global visuals by **adjusting color scales** and incorporating **detailed tooltips** and interactive elements.
 
 ### Feedback Incorporation
-Our revisions addressed specific feedback points from our peer reviews and user comments:
+Our revisions addressed specific feedback points from our peer reviews and user comments, including the following:
 - Adjusted visualization elements like color schemes and legend placements to improve clarity and aesthetics.
 - Altered the data presentation in tooltips and cards to enhance understanding of the metrics.
 - Addressed technical challenges such as tooltip persistence in Altair and layout responsiveness across different resolutions.
